@@ -1,34 +1,40 @@
-﻿<div class="row">
-    <div class="col-md-4">
-        <label class="col-form-label"> Start Date of the Activity</label>
-        <input type="date" id="StartDate" class="form-control" />
-    </div>
+﻿<head>
+    <script src="~/js/Validation.js"></script>
+</head>
+<form id="form">
+    <div class="row">
+        <div class="col-md-4">
+            <label class="col-form-label"> Start Date of the Activity</label>
+            <input type="date" id="StartDate" class="form-control" />
+        </div>
 
-    <div class="col-md-4">
-        <label class="col-form-label">End Date of the Activity</label>
-        <input type="date" id="EndDate" class="form-control" />
+        <div class="col-md-4">
+            <label class="col-form-label">End Date of the Activity</label>
+            <input type="date" id="EndDate" class="form-control" />
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-4">
-        <label class="col-form-label"> Start Date of Registeration to the Activity</label>
-        <input type="date" class="form-control" id="RegisterStartDate" />
-    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <label class="col-form-label"> Start Date of Registeration to the Activity</label>
+            <input type="date" class="form-control" id="RegisterStartDate" />
+        </div>
         <div class="col-md-4">
             <label class="col-form-label">End Date of Registeration to the Activity</label>
             <input type="date" class="form-control" id="RegisterEndDate" />
         </div>
         <div style="margin-top: 7px;" id="CheckDate"></div>
-</div>
-<div class="row">
-    <div class="col-md-1">
-    <button type="submit" id="submit" class="btn btn-dark btn-search" onclick="return Valdation()"> Save </button>
+    </div>
+    <div class="row">
+        <div class="col-md-1">
+            <button type="submit" id="submit" class="btn btn-dark btn-search" onclick="return Valdation()"> Save </button>
         </div>
-</div>
+    </div>
+</form>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript">
     $(function () {
         $("#submit").click(function () {
+
             var RegisterStartDate = $("#RegisterStartDate").val();
             var RegisterEndDate = $("#RegisterEndDate").val();
             var StartDate = $("#StartDate").val();

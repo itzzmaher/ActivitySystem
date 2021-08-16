@@ -66,18 +66,9 @@ namespace ActivitySystem.Controllers
         {
             try
             {
-                if (ActivityInfo.RegisterStartDate > ActivityInfo.RegisterEndDate)
-                {
-                    ViewData["UserId"] = new SelectList(new UsersRepository().GetAllInstuctors(), "Id", "Name");
-                    ViewData["SemesterId"] = new SelectList(new ActivityRepository().GetAllSemestersForRegisteration(), "Id", "SemesterName");
-                    ViewBag.error = 1;
-                }
-                else
-                {
-                    int checkResult = ActivityInformation.UpdateActivityInstructor(ActivityInfo);
-                    if (checkResult == 1)
-                        ViewData["Successful"] = "Activity Updated Successfully";
-                }
+                int checkResult = ActivityInformation.UpdateActivityInstructor(ActivityInfo);
+                if (checkResult == 1)
+                ViewData["Successful"] = "Activity Updated Successfully";
             }
             catch
             {

@@ -8,7 +8,7 @@
                     Swal.fire(result,'','success')
                         .then(
                             function () {
-                                window.location.href = '@Url.Action("Index", "Instructor")';
+                                window.location.href = '@Url.Action("RegisterApproval", "Instructor")';
                             }
                         );
                     </Text>
@@ -20,7 +20,7 @@
                     Swal.fire(result, '', 'error')
                         .then(
                             function () {
-                                window.location.href = '@Url.Action("Index", "Instructor")';
+                                window.location.href = '@Url.Action("RegisterApproval", "Instructor")';
                             }
                         );
                     </Text>
@@ -54,13 +54,16 @@
                                 <td>@item.User.KfuEmail</td>
                                 <td>@item.StatusReg.StatusName</td>
                                 <td>
-                                    @if (item.Activity.RegisterStartDate < DateTime.Now && item.Activity.RegisterEndDate > DateTime.Now)
+
+                                    @if (item.StatusRegId == 1)
                                     {
-                                        if (item.StatusRegId != 2)
-                                        {
-                                        <a asp-controller="Instructor" asp-action="ChangeStatus" asp-route-id="@item.GuId" asp-route-status="Approve" class="btn btn-outline-success">Approve </a>}
-                                    
-                                    <a asp-controller="Instructor" asp-action="ChangeStatus" asp-route-id="@item.GuId" asp-route-status="Deny" class="btn btn-outline-danger">Deny</a>}
+                                        <a asp-controller="Instructor" asp-action="ChangeStatus" asp-route-id="@item.GuId" asp-route-status="Approve" class="btn btn-outline-success">Approve </a>
+
+                                        <a asp-controller="Instructor" asp-action="ChangeStatus" asp-route-id="@item.GuId" asp-route-status="Deny" class="btn btn-outline-danger">Deny</a>}
+                                    else if (item.StatusRegId == 2)
+                                    {
+                                        <a asp-controller="Instructor" asp-action="ChangeStatus" asp-route-id="@item.GuId" asp-route-status="Deny" class="btn btn-outline-danger">Deny</a>
+                                    }
                                 </td>
                             </tr>
                             i++;

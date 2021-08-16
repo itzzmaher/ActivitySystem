@@ -22,17 +22,18 @@
                         );
                     </Text>
                     }
-                    @*else if(@ViewBag.error == 1 )
+                else if (@ViewData["Falied"] != null && ViewData["NoRedirect"] != null)
                     {
                     <Text>
-                    Swal.fire("Register start date can't be higher the register end date", '', 'error');
+                    var result = '@Html.Raw(ViewData["Falied"])';
+                    Swal.fire(result, '', 'error');
                     </Text>
-                    }*@
+                    }
             }
     </script>
     <div class="card-body">
 
-        <form asp-action="AddActivity" id="form" name="form1">
+        <form asp-action="AddActivity" id="form">
             <div class="row">
                 <div class="col-md-4">
                     <label class="col-form-label">Activity Name</label>
@@ -56,28 +57,24 @@
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <label class="col-form-label"> Start Date of the Activity</label>
-                    <input type="date" asp-for="StartDate" class="form-control" value="StartDate" />
+                    <label class="col-form-label">Registeration Start Date</label>
+                    <input type="date" asp-for="RegisterStartDate" class="form-control" id="RegisterStartDate" />
                 </div>
-
                 <div class="col-md-4">
-                    <label class="col-form-label">End Date of the Activity</label>
-                    <input type="date" asp-for="EndDate" class="form-control" value="EndDate" />
+                    <label class="col-form-label">Registeration End Date</label>
+                    <input type="date" asp-for="RegisterEndDate" class="form-control" id="RegisterEndDate" />
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <label class="col-form-label"> Start Date of Registeration to the Activity</label>
-                    <input type="date" asp-for="RegisterStartDate" class="form-control" value="RegisterStartDate" />
-                    @if (ViewBag.error == 1)
-                    {
-                        <div class="row"><p style="color:red">Register start date can't be higher the register end date </p></div>}
+                    <label class="col-form-label"> Start Date of the Activity</label>
+                    <input type="date" asp-for="StartDate" class="form-control" id="StartDate" />
                 </div>
-
                 <div class="col-md-4">
-                    <label class="col-form-label">End Date of Registeration to the Activity</label>
-                    <input type="date" asp-for="RegisterEndDate" class="form-control" value="RegisterEndDate" />
+                    <label class="col-form-label">End Date of the Activity</label>
+                    <input type="date" asp-for="EndDate" class="form-control" id="EndDate" />
                 </div>
+                <div style="margin-top: 7px;" id="CheckDate"></div>
             </div>
             <br />
             <div class="row">
@@ -98,7 +95,7 @@
             </div>
 
         </form>
-</div>
+    </div>
 </div>
 
 
@@ -115,5 +112,45 @@
             ['table', ['table']],
             ['height', ['height']]
         ]
+    });
+</script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#submit").click(function () {
+
+            var RegisterStartDate = $("#RegisterStartDate").val();
+            var RegisterEndDate = $("#RegisterEndDate").val();
+            var StartDate = $("#StartDate").val();
+            var EndDate = $("#EndDate").val();
+
+
+            if (new Date(RegisterStartDate).getTime() >= new Date(RegisterEndDate).getTime()) {
+                $("#CheckDate").html("Registeration start date can't be higher than registeration end date").css("color", "red");
+                return false;
+            }
+            else if (new Date(StartDate).getTime() >= new Date(EndDate).getTime()) {
+                $("#CheckDate").html("Start date can't be higher than end date").css("color", "red");
+                return false;
+            }
+            else if (new Date(StartDate).getTime() <= new Date(RegisterStartDate).getTime()) {
+                $("#CheckDate").html("Registeration start date can't be higher than start date").css("color", "red");
+                return false;
+            }
+            else if (new Date(StartDate).getTime() <= new Date(RegisterEndDate).getTime()) {
+                $("#CheckDate").html("Registeration end date can't be higher than start date").css("color", "red");
+                return false;
+            }
+            else if (new Date(EndDate).getTime() < new Date(RegisterStartDate).getTime()) {
+                $("#CheckDate").html("Registeration start date can't be higher than end date").css("color", "red");
+                return false;
+            }
+            else if (new Date(EndDate).getTime() < new Date(RegisterEndDate).getTime()) {
+                $("#CheckDate").html("Registeration End date can't be higher than end date").css("color", "red");
+                return false;
+            }
+            $("#CheckDate").html("").css("color", "red");
+            return true;
+        });
     });
 </script>

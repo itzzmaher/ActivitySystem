@@ -80,18 +80,12 @@ namespace ActivitySystem.Controllers
         {
             try
             {
-                if (ActivityInfo.RegisterStartDate > ActivityInfo.RegisterEndDate)
-                {
-                    ViewData["UserId"] = new SelectList(new UsersRepository().GetAllInstuctors(), "Id", "Name");
-                    ViewData["SemesterId"] = new SelectList(new ActivityRepository().GetAllSemestersForRegisteration(), "Id", "SemesterName");
-                    ViewBag.error = 1;
-                }
-                else { 
+
                 int checkResult = ActivityInformation.ActivityInsert(ActivityInfo, int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
                 if (checkResult == 1)
                 {
                     ViewData["Successful"] = "Activity Added Successfully";
-                }}
+                }
             }
             catch
             {
@@ -214,18 +208,11 @@ namespace ActivitySystem.Controllers
         {
             try
             {
-                if (ActivityInfo.RegisterStartDate > ActivityInfo.RegisterEndDate)
-                {
-                    ViewData["UserId"] = new SelectList(new UsersRepository().GetAllInstuctors(), "Id", "Name");
-                    ViewData["SemesterId"] = new SelectList(new ActivityRepository().GetAllSemestersForRegisteration(), "Id", "SemesterName");
-                    ViewBag.error = 1;
-                }
-                else { 
+
                 int checkResult = ActivityInformation.UpdateActivityAdmin(ActivityInfo);
                 if (checkResult == 1)
                     ViewData["Successful"] = "Activity Updated Successfully";
                 }
-            }
             catch
             {
                 ViewData["Falied"] = "An Error Occurred while processing your request, please try again Later";
@@ -321,20 +308,13 @@ namespace ActivitySystem.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AdminActivate(tblUsers UserInfo,string ConfirmedPassword)
+        public IActionResult AdminActivate(tblUsers UserInfo)
         {
             try
             {
-                if (UserInfo.Password != ConfirmedPassword)
-                {
-                    ViewBag.Error = 1;
-                }
-                else
-                {
-                    string EncryptedPassword = UsersInformation.Encrypt(UserInfo.Password);
-                    UsersInformation.ActivateUser(UserInfo, EncryptedPassword);
-                    ViewData["Successful"] = "User Activated Successfully";
-                }
+                 string EncryptedPassword = UsersInformation.Encrypt(UserInfo.Password);
+                 UsersInformation.ActivateUser(UserInfo, EncryptedPassword);
+                 ViewData["Successful"] = "User Activated Successfully";
             }
             catch
             {
