@@ -1,0 +1,78 @@
+﻿@model IEnumerable<tblSemesters>;
+<head>
+    <script>
+                @{
+                if (@ViewData["Successful"] != null)
+                {
+                    <Text>
+                    var result = '@Html.Raw(ViewData["Successful"])';
+                    Swal.fire(result,'','success')
+
+                    </Text>
+                    }
+                    else if(@ViewData["Falied"] != null && ViewData["NoRedirect"] != null)
+                    {
+                    <Text>
+                    var result = '@Html.Raw(ViewData["Falied"])';
+                    Swal.fire(result, '', 'error');
+                    </Text>
+                    }
+                    else if(@ViewData["Falied"] != null && ViewData["NoRedirect"] == null)
+                    {
+                    <Text>
+                    var result = '@Html.Raw(ViewData["Falied"])';
+                    Swal.fire(result, '', 'error');
+                    </Text>
+                    }
+            }
+    </script>
+</head>
+
+<div class="card-body">
+    <div id="v-card" class="row justify-content-center" style="margin-top: 24px;">
+        <div class="col-md-6 ">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Semester Name</th>
+                        <th>Activate/Dectivate</th>
+                        <th>Remove Semester</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var i = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td>@item.SemesterName</td>
+                                <td>
+                                    @if (item.IsActive == true)
+                                    {
+                                        <a asp-controller="Admin" asp-action="SemesterState" asp-route-id="@item.GuId" asp-route-status="Deactivate" class="btn btn-outline-success">Deactivate </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Admin" asp-action="SemesterState" asp-route-id="@item.GuId" asp-route-status="Activate" class="btn btn-outline-danger">Activate </a>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.IsDone == false)
+                                    {
+                                        <a asp-controller="Admin" asp-action="RemoveSemester" asp-route-id="@item.GuId" asp-route-status="Deactivate" class="btn btn-outline-secondary">Deactivate </a>
+                                    }
+
+                                </td>
+                            </tr>
+                            i++;
+                        } }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8"></div>
+        <div class="col-md-2"><a asp-controller="Admin" asp-action="AddSemester" class="btn btn-outline-secondary">Add Semester</a></div>
+    </div>
+</div>

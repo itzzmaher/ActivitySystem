@@ -1,0 +1,44 @@
+﻿@model ActivitySystem.Models.tblUsers
+<div class="card">
+    <div class="card-header">
+        <h3>User Profile</h3>
+    </div>
+
+    <div class="card-body">
+
+        <form id="form">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-form-label">Full Name</label>
+                    <input type="text" asp-for="Name" class="form-control">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-form-label">E-Mail</label>
+                    <input type="text" asp-for="KfuEmail" class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-form-label">Role Name</label>
+                    <select class="form-control custom-select" asp-items="ViewBag.RoleId" asp-for="RoleId"></select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-form-label">College</label>
+                    <select class="form-control custom-select" asp-items="ViewBag.CollegeId" asp-for="CollegeId"></select>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-12 " style="text-align: left;">
+                    <a asp-action="ModifyUserInfo" asp-controller="Admin" class="btn btn-dark btn-search"> Edit </a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

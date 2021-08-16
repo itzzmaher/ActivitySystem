@@ -1,0 +1,64 @@
+﻿@model IEnumerable<tblActivities>;
+<div class="card-body">
+    <div id="v-card" class="row justify-content-center" style="margin-top: 44px;">
+        <div class="col-md-8 ">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Activity Name</th>
+                        <th>Open/Close</th>
+                        <th>Update</th>
+                    
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var i = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td>@item.ActivityName</td>
+
+                                <td>
+                                    @if (@item.IsOpen == true)
+                                    {
+                                        <a asp-controller="Admin" asp-action="UpdateStatus" asp-route-id="@item.GuId" asp-route-status="Close" class="btn btn-outline-success">Close </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Admin" asp-action="UpdateStatus" asp-route-id="@item.GuId" asp-route-status="Open" class="btn btn-outline-danger">Open </a>
+                                    }
+
+
+                                    @if (item.IsActive == true)
+                                    {
+                                        <a asp-controller="Admin" asp-action="ActiveState" asp-route-id="@item.GuId" asp-route-status="Deactivate" class="btn btn-outline-secondary">Deactivate </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Admin" asp-action="ActiveState" asp-route-id="@item.GuId" asp-route-status="Activate" class="btn btn-outline-secondary">Activate </a>
+                                    }
+                                </td>
+                                <td><a asp-controller="Admin" asp-action="AdminUpdateActivity" asp-route-id=@item.GuId class="btn btn-outline-secondary">Update</a></td>
+                                
+                            </tr>
+                            i++;
+                        } }
+                </tbody>
+            </table>
+        </div>
+    </div><script>
+                @{
+                    if (@ViewData["Successful"] != null)
+                    {
+                    <Text>
+                    var result = '@Html.Raw(ViewData["Successful"])';
+                    Swal.fire(result,'','success')
+
+                    </Text>
+                    }
+
+            }
+</script>
+</div>

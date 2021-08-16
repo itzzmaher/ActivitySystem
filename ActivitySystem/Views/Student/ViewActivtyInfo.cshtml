@@ -1,0 +1,49 @@
+﻿@model tblActivities
+<style>
+    fieldset {
+        background-color: #eeeeee;
+    }
+
+    legend {
+        background-color: gray;
+        color: white;
+        padding: 5px 10px;
+    }
+    .notice {
+        background-color: #fafafa;
+        border-left: 6px solid #7f7f84;
+        margin-bottom: 10px;
+        -webkit-box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+        -moz-box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+        box-shadow: 0 5px 8px -6px rgba(0,0,0,.2);
+        font-size: 16px;
+    }
+
+    .notice-lg {
+        padding: 35px;
+        font-size: large;
+    }
+</style>
+
+    
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+    <div class="card-body">
+        <div class="row">
+            <div class="notice col-lg-6">
+                <strong>@Model.ActivityName</strong><br />
+                <strong>Supervisor Name:</strong> @Model.Supervisor.Name <br />
+                <strong>Supervisor Email:</strong> @Model.Supervisor.KfuEmail <br />
+                <strong>Start Date:</strong> @Model.StartDate <br />
+                <strong>End Date:</strong> @Model.EndDate
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="notice col-lg-6">
+                <p>@Html.Raw(Model.Content)</p>
+            </div>
+        </div>
+    </div>

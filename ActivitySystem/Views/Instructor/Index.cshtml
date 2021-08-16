@@ -1,0 +1,66 @@
+﻿@model IEnumerable<tblActivities>;
+
+<div class="card-body">
+    <div id="v-card" class="row justify-content-center" style="margin-top: 44px;">
+        <div class="col-md-8 ">
+            <table class="table">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Activity Name</th>
+                        <th>Open/Close</th>
+                        <th>Activate/Deactivate</th>
+                        <th>Update/View Students</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var i = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td>@item.ActivityName</td>
+
+                                <td>
+                                    @if (@item.IsOpen == true)
+                                    {
+                                        <a asp-controller="Instructor" asp-action="UpdateStatus" asp-route-id="@item.GuId" asp-route-status="Close" class="btn btn-outline-success">Close </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Instructor" asp-action="UpdateStatus" asp-route-id="@item.GuId" asp-route-status="Open" class="btn btn-outline-danger">Open </a>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.IsActive == true)
+                                    {
+                                        <a asp-controller="Instructor" asp-action="ActiveState" asp-route-id="@item.GuId" asp-route-status="Deactivate" class="btn btn-outline-success">Deactivate </a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="Instructor" asp-action="ActiveState" asp-route-id="@item.GuId" asp-route-status="Activate" class="btn btn-outline-danger">Activate </a>
+                                    }
+                                </td>
+                                <td><a asp-controller="Instructor" asp-action="UpdateActivityInfo" asp-route-id=@item.GuId class="btn btn-outline-secondary">Update</a>
+                                <a asp-controller="Instructor" asp-action="ViewStudents" asp-route-id=@item.GuId class="btn btn-outline-info">View</a></td>
+                            </tr>
+                            i++;
+                        } }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+                @{
+                    if (@ViewData["Successful"] != null)
+                    {
+                    <Text>
+                    var result = '@Html.Raw(ViewData["Successful"])';
+                    Swal.fire(result,'','success')
+
+                    </Text>
+                    }
+
+            }
+</script>

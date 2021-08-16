@@ -1,0 +1,346 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using ActivitySystem.Models;
+using ActivitySystem.Repository;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace ActivitySystem.Controllers
+{
+    [Authorize(Roles = "Admin,SuperAdmin")]
+    public class AdminController : Controller
+    {
+        UsersRepository UsersInformation = new UsersRepository();
+        ActivityRepository ActivityInformation = new ActivityRepository();
+        public IActionResult Index()
+        {
+            ViewData["Successful"] = TempData["Success"];
+            if (User.IsInRole("SuperAdmin"))
+            return View(UsersInformation.GetAllUsersForSuperAdmin());
+            else
+                return View(UsersInformation.GetAllUsersForAdmin());
+        }
+
+        public IActionResult Dashboard()
+        {
+            ViewData["TodayName"] = DateTime.Now.DayOfWeek.ToString();
+            ViewData["TodayDate"] = DateTime.Now.ToString("dd/MM/yyy");
+            ViewData["CurrentSem"] = ActivityInformation.GetCurrentSemester();
+            ViewData["NumberOfActivites"] = ActivityInformation.GetAllOpenActivites().Count();
+            ViewData["TotalStudents"] = UsersInformation.GetAllStudents().Count();
+            ViewData["NumberOfInstructors"] = UsersInformation.GetAllInstuctors().Count();
+            ViewData["NumberOfAdmins"] = UsersInformation.GetAllAdmins().Count();
+            return View();
+        }
+        public IActionResult ViewSemesters(string msgsuccess, string msgfail)
+        {
+            ViewData["Successful"] = msgsuccess;
+            ViewData["Falied"] = msgfail;
+            return View(ActivityInformation.GetAllSemesters());
+        }
+        public IActionResult AddSemester()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddSemester(tblSemesters SemInfo)
+        {
+          int CheckResult = ActivityInformation.AddSemester(SemInfo);
+            if (CheckResult == 1)
+                ViewData["Successful"] = "Semester Added Successfully";
+            else if (CheckResult == 2) { 
+                ViewData["Falied"] = "This Semester already Exist";
+                ViewData["NoRedirect"] = "No Redirect";
+            }
+            else
+               ViewData["Falied"] = "An Error Occurred while processing your request, please try again Later";
+            return View();
+        }
+        public IActionResult ViewActivities()
+        {
+            ViewData["Successful"] = TempData["Success"];
+            ViewData["Failled"] = TempData["Failled"];
+            return View(ActivityInformation.GetAllActivities());
+        }
+        public IActionResult AddActivity()
+        {
+            ViewData["UserId"] = new SelectList(new UsersRepository().GetAllInstuctors(), "Id", "Name");
+            ViewData["SemesterId"] = new SelectList(new ActivityRepository().GetAllSemestersForRegisteration(), "Id", "SemesterName");
+
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddActivity(tblActivities ActivityInfo)
+        {
+            try
+            {
+                if (ActivityInfo.RegisterStartDate > ActivityInfo.RegisterEndDate)
+                {
+                    ViewData["UserId"] = new SelectList(new UsersRepository().GetAllInstuctors(), "Id", "Name");
+                    ViewData["SemesterId"] = new SelectList(new ActivityRepository().GetAllSemestersForRegisteration(), "Id", "SemesterName");
+                    ViewBag.error = 1;
+                }
+                else { 
+                int checkResult = ActivityInformation.ActivityInsert(ActivityInfo, int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+                if (checkResult == 1)
+                {
+                    ViewData["Successful"] = "Activity Added Successfully";
+                }}
+            }
+            catch
+            {
+                ViewData["Falied"] = "An Error Occurred while processing your request, please try again Later";
+            }
+            return View(ActivityInfo);
+        }
+        public IActionResult InsertAccount()
+        {
+            ViewData["CollegeId"] = new SelectList(UsersInformation.GetAllColleges(), "Id", "CollegeName");
+            if (User.IsInRole("SuperAdmin"))
+            {
+                ViewData["RoleId"] = new SelectList(UsersInformation.GetAllRoles(), "Id", "RoleName");
+            }
+            if (User.IsInRole("Admin"))
+            {
+                ViewData["RoleId"] = new SelectList(UsersInformation.GetAllRolesForAdmin(), "Id", "RoleName");
+            }
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult InsertAccount(tblUsers UserInfo)
+        {
+            try
+            {
+                int checkResult = UsersInformation.UserInsert(UserInfo);
+                if (checkResult == 1)
+                    ViewData["Successful"] = "User Added Successfully";
+                else if (checkResult == 2)
+                {
+                    ViewData["Falied"] = "This user already exists";
+                    ViewData["NoRedirect"] = "No Redirect";
+                }
+                else
+                    ViewData["Falied"] = "An Error Occurred while processing your request, please try again Later";
+            }
+            catch
+            {
+                ViewData["Falied"] = "An Error Occurred while processing your request, please try again Later";
+            }
+            ViewData["RoleId"] = new SelectList(UsersInformation.GetAllRoles(), "Id", "RoleName", UserInfo.RoleId);
+            ViewData["CollegeId"] = new SelectList(UsersInformation.GetAllColleges(), "Id", "CollegeName", UserInfo.CollegeId);
+            return View(UserInfo);
+        }
+        public IActionResult SemesterState(Guid? id,string status)
+        {
+            try
+            {
+                int CheckResult = ActivityInformation.SemesterActivation(id, status);
+                if (CheckResult == 1)
+                {
+                    return RedirectToAction("ViewSemesters", "Admin", new { msgsuccess = "Semeter has been activated Successfully", msgfail = "" });
+                    
+                }
+                else if (CheckResult == 2)
+                {
+
+                    return RedirectToAction("ViewSemesters", "Admin", new { msgsuccess = "Semeter has been deactivated Successfully", msgfail = "" });
+                }
+                else
+                {
+                    return RedirectToAction("ViewSemesters", "Admin", new { msgsuccess = "", msgfail = "An Error Occurred while processing your request, please try again Later" });
+                }
+            }
+            catch
+            {
+
+                return RedirectToAction("ViewSemesters", "Admin", new { msgsuccess = "", msgfail = "An Error Occurred while processing your request, please try again Later" });
+            }
+          
+        }
+
+        public IActionResult ActiveState(Guid? id, string status)
+        {
+            try
+            {
+
+                bool st = true;
+                if (status == "Deactivate")
+                {
+                    st = false;
+                }
+                int checkResult = ActivityInformation.ChangeSt(id);
+                if (checkResult == 1){
+                    TempData["Success"] = "Activity has been Activated Successfully";
+                    TempData.Keep("Success");
+                    return RedirectToAction("ViewActivities", "Admin");
+                }
+
+                else if (checkResult == 2) {
+                    TempData["Success"] = "Activity has been Dectivated Successfully ";
+                    TempData.Keep("Success");
+                    return RedirectToAction("ViewActivities", "Admin");
+                }
+                else {
+                    TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                    TempData.Keep("Failled");
+                    return RedirectToAction("ViewActivities",  "Admin");
+                }
+            }
+            catch
+            {
+                TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                TempData.Keep("Failled");
+                return RedirectToAction("ViewActivities", "Admin");
+            }
+        }
+
+        public IActionResult AdminUpdateActivity(Guid? id)
+        {
+            var ActivityInfo = ActivityInformation.GetActivityByGuId(id);
+            ViewData["UserId"] = new SelectList(new UsersRepository().GetAllInstuctors(), "Id", "Name");
+            ViewData["SemesterId"] = new SelectList(new ActivityRepository().GetAllSemestersForRegisteration(), "Id", "SemesterName");
+            return View(ActivityInfo);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AdminUpdateActivity(tblActivities ActivityInfo)
+        {
+            try
+            {
+                if (ActivityInfo.RegisterStartDate > ActivityInfo.RegisterEndDate)
+                {
+                    ViewData["UserId"] = new SelectList(new UsersRepository().GetAllInstuctors(), "Id", "Name");
+                    ViewData["SemesterId"] = new SelectList(new ActivityRepository().GetAllSemestersForRegisteration(), "Id", "SemesterName");
+                    ViewBag.error = 1;
+                }
+                else { 
+                int checkResult = ActivityInformation.UpdateActivityAdmin(ActivityInfo);
+                if (checkResult == 1)
+                    ViewData["Successful"] = "Activity Updated Successfully";
+                }
+            }
+            catch
+            {
+                ViewData["Falied"] = "An Error Occurred while processing your request, please try again Later";
+            }
+            return View();
+        }
+        public IActionResult UpdateStatus(Guid? id)
+        {
+            try
+            {
+
+
+                int checkResult = ActivityInformation.ChangeStatus(id);
+                if (checkResult == 1)
+                {
+                    TempData["Success"] = "Activity has been Opened Successfully";
+                    TempData.Keep("Success");
+                    return RedirectToAction("ViewActivities", "Admin");
+                }
+                else
+                {
+                    TempData["Success"] = "Activity has been Closed Successfully";
+                    TempData.Keep("Success");
+                    return RedirectToAction("ViewActivities", "Admin");
+                }
+            }
+            catch
+            {
+                TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                TempData.Keep("Failled");
+                return RedirectToAction("ViewActivities", "Admin");
+            }
+        }
+        public IActionResult ModifyUserInfo(Guid id)
+        {
+            
+            ViewData["CollegeId"] = new SelectList(UsersInformation.GetAllColleges(), "Id", "CollegeName");
+            if (User.IsInRole("SuperAdmin"))
+            {
+                ViewData["RoleId"] = new SelectList(UsersInformation.GetAllRoles(), "Id", "RoleName");
+            }
+            if (User.IsInRole("Admin"))
+            {
+                ViewData["RoleId"] = new SelectList(UsersInformation.GetAllRolesForAdmin(), "Id", "RoleName");
+            }
+            return View(UsersInformation.GetUserByGuId(id));
+        }
+        public IActionResult RemoveSemester(Guid id)
+        {
+            try
+            {
+                int CheckResult = ActivityInformation.SemesterDelete(id);
+                if (CheckResult == 1)
+                    return RedirectToAction("ViewSemesters", "Admin", new { msgsuccess = "Semeter has been Deleted Successfully", msgfail = "" });
+                else 
+                    return RedirectToAction("ViewSemesters", "Admin", new { msgsuccess = "", msgfail = "An Error Occurred while processing your request, please try again Later" });
+            }
+            catch
+            {
+                return RedirectToAction("ViewSemesters", "Admin", new { msgsuccess = "", msgfail = "An Error Occurred while processing your request, please try again Later" });
+            }
+        }
+        public IActionResult DeactivateUser(Guid id)
+        {
+            tblUsers UserInfo = UsersInformation.GetUserByGuId(id);
+            if (UserInfo.IsActive == true)
+            {
+                int CheckResult = UsersInformation.DeactivateUser(UserInfo);
+                if(CheckResult == 1) { 
+                TempData["Success"] = "Account has been deactivated successfully";
+                TempData.Keep("Success");
+                return RedirectToAction("Index", "Admin");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+            else
+            {
+                TempData["GuId"] = UserInfo.GuId;
+                TempData.Keep("GuId");
+                return RedirectToAction(nameof(AdminActivate));
+            }
+        }
+        public IActionResult AdminActivate()
+        {
+            Guid guid = Guid.Parse(TempData["GuId"].ToString());
+            tblUsers userInfo = UsersInformation.GetUserByGuId(guid);
+            ViewData["RoleId"] = new SelectList(UsersInformation.GetAllRoles(), "Id", "RoleName");
+            ViewData["CollegeId"] = new SelectList(UsersInformation.GetAllColleges(), "Id", "CollegeName");
+            return View(userInfo);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AdminActivate(tblUsers UserInfo,string ConfirmedPassword)
+        {
+            try
+            {
+                if (UserInfo.Password != ConfirmedPassword)
+                {
+                    ViewBag.Error = 1;
+                }
+                else
+                {
+                    string EncryptedPassword = UsersInformation.Encrypt(UserInfo.Password);
+                    UsersInformation.ActivateUser(UserInfo, EncryptedPassword);
+                    ViewData["Successful"] = "User Activated Successfully";
+                }
+            }
+            catch
+            {
+                ViewData["Falied"] = "An Error Occurred while processing your request, please try again Later";
+            }
+            return View();
+        }
+    }
+}

@@ -1,0 +1,28 @@
+﻿@model IEnumerable<tblRegisterations>;
+
+<div class="card-body">
+    <div id="v-card" class="row justify-content-center" style="margin-top: 44px;">
+        <div class="col-md-4 ">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Student Name</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var i = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td>@item.User.Name</td>
+                            </tr>
+                            i++;
+                        } }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

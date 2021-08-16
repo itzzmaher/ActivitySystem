@@ -1,0 +1,90 @@
+﻿@model ActivitySystem.Models.tblUsers
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+    <link href="~/css/styles.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <link href="~/lib/sweetalert2/sweetalert2.css" rel="stylesheet" />
+    <script src="~/lib/sweetalert2/sweetalert2.js"></script>
+
+
+    <title>Verification Email</title>
+
+
+    <script>
+                @{
+                if (@ViewData["Successful"] != null)
+                {
+                    <Text>
+                    var result = '@Html.Raw(ViewData["Successful"])';
+                    Swal.fire(result,'','success')
+                        .then(
+                            function () {
+                                window.location.href = '@Url.Action("ActivateAccount","Account")';
+                            }
+                        );
+                    </Text>
+                }
+                else if (@ViewData["Falied"] != null && ViewData["NoRedirect"] == null)
+                {
+                    <Text>
+                    var result = '@Html.Raw(ViewData["Falied"])';
+                    Swal.fire(result, '', 'error')
+                        .then(
+                            function () {
+                                window.location.href = '@Url.Action("LogIn", "Account")';
+                            }
+                        );
+                    </Text>
+                    }
+                    else if(@ViewData["Falied"] != null && ViewData["NoRedirect"] != null)
+                    {
+                    <Text>
+                    var result = '@Html.Raw(ViewData["Falied"])';
+                    Swal.fire(result, '', 'error');
+                    </Text>
+                    }
+                    else if(@ViewData["Verified"] != null )
+                    {
+                    <Text>
+                    var result = '@Html.Raw(ViewData["Verified"])';
+                    Swal.fire(result, '', 'error');
+                    </Text>
+                    }
+            }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div id="v-card" class="row justify-content-center" style="margin-top: 124px;">
+            <div class="card o-hidden border-0 shadow-lg my-5 col-xl-7 col-lg-7 col-md-7">
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            <div class="p-5">
+                                <h1 class="text-center h4 text-gray-900 mb-4" style="font-size: 120%;">Email Verification</h1>
+                                <form asp-action="VerifyAccount">
+                                    <div id="email-form-group" class="form-group">
+                                        <h1 class="text-center h4 text-gray-600 mb-4" style="font-size: 12px;">Enter your KFU email</h1>
+                                        <input name="KfuEmail" id="email" type="email" class="text-center form-control" placeholder="id@kfu.edu.sa">
+                                        <button type="submit" id="send-btn" class="btn btn-dark" style="margin-left: 130px; margin-top: 20px;">send</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

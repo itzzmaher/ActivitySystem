@@ -1,0 +1,57 @@
+﻿@model IEnumerable<tblUsers>
+    <div class="card-body">
+        <div id="v-card" class="row justify-content-center" style="margin-top: 44px;">
+            <div class="col-md-10 ">
+                    <table id="datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>User Name</th>
+                                <th>College</th>
+                                <th>Role</th>
+                                <th>State</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ var i = 1;
+                                foreach (var item in Model)
+                                {
+
+                                    <tr>
+                                        <td>@i </td>
+                                        <td>@item.Name</td>
+                                        <td>@item.College.CollegeName</td>
+                                        <td>@item.Role.RoleName</td>
+                                        <td>
+                                            @if (item.IsActive == true)
+                                            {
+                                                <a asp-controller="Admin" asp-action="DeactivateUser" asp-route-id="@item.GuId" class="btn btn-outline-success">Deactivate </a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-controller="Admin" asp-action="DeactivateUser" asp-route-id="@item.GuId" class="btn btn-outline-danger">Activate </a>
+                                            }
+                                        </td>
+                                        <td><a asp-controller="Admin" asp-action="ModifyUserInfo" asp-route-id="@item.GuId" class="btn btn-outline-secondary">Modify</a></td>
+                                    </tr>
+                                    i++;
+                                } }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script>
+@{
+    if (@ViewData["Successful"] != null)
+    {
+        <Text>
+        var result = '@Html.Raw(ViewData["Successful"])';
+        Swal.fire(result,'','success')
+
+        </Text>
+    }
+
+}
+        </script>

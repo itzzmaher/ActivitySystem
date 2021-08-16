@@ -1,0 +1,64 @@
+﻿@model ActivitySystem.Models.tblSemesters
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="~/lib/sweetalert2/sweetalert2.css" rel="stylesheet" />
+    <script src="~/lib/sweetalert2/sweetalert2.js"></script>
+    <title>Verification Email</title>
+    <script>
+                @{
+                if (@ViewData["Successful"] != null)
+                {
+                    <Text>
+                    var result = '@Html.Raw(ViewData["Successful"])';
+                    Swal.fire(result,'','success')
+                    .then(
+                            function () {
+                                window.location.href = '@Url.Action("ViewSemesters", "Admin")';
+                            }
+                        );
+                    </Text>
+                    }
+
+                    else if(@ViewData["Falied"] != null && ViewData["NoRedirect"] == null)
+                    {
+                    <Text>
+                    var result = '@Html.Raw(ViewData["Falied"])';
+                    Swal.fire(result, '', 'error');
+                    </Text>
+                    }
+            }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div id="v-card" class="row justify-content-center" style="margin-top: 124px;">
+            <div class="card o-hidden border-0 shadow-lg my-5 col-xl-7 col-lg-7 col-md-7">
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            <div class="p-5">
+                                <h1 class="text-center h4 text-gray-900 mb-4" style="font-size: 20px;">Add Semester</h1>
+                                <form asp-action="AddSemester">
+                                    <div id="email-form-group" class="form-group">
+                                        <label class="col-form-label" placeholder="Semester Name">Semester Name</label>
+                                        <input type="text" asp-for="SemesterName" class="form-control" placeholder="Example: 1st semester - 2020">
+                                        <br />
+                                        <button type="submit" id="send-btn" class="btn btn-dark" margin-top: 20px;">send</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

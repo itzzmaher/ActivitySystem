@@ -1,0 +1,52 @@
+﻿@model IEnumerable<tblRegisterations>
+
+<div class="card-body">
+    <div id="v-card" class="row justify-content-center" style="margin-top: 44px;">
+        <div class="col-md-6  ></divclass=" col-md-8>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Activity Name</th>
+                        <th>Student Name</th>
+                        <th>Status</th>
+                        <th>Approve/Deny</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ var i = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@i </td>
+                                <td>@item.Activity.ActivityName</td>
+                                <td>@item.User.Name</td>
+                                <td>@item.StatusReg.StatusName</td>
+                                <td>
+                                    @if (item.StatusRegId == 1 || item.StatusRegId == 2)
+                                    {
+                                        <a asp-controller="Student" asp-action="Cancelation" asp-route-id="@item.GuId" asp-route-status="Cancel" class="btn btn-warning">Cancel </a>}
+                                </td>
+                            </tr>
+                            i++;
+                        } }
+                </tbody>
+
+
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+                @{
+                    if (@ViewData["Successful"] != null)
+                    {
+                    <Text>
+                    var result = '@Html.Raw(ViewData["Successful"])';
+                    Swal.fire(result,'','success')
+
+                    </Text>
+                    }
+
+            }
+</script>
