@@ -22,10 +22,7 @@ namespace ActivitySystem.Controllers
     public class AccountController : Controller
     {
         UsersRepository UsersInformation = new UsersRepository();
-        public IActionResult Index()
-        {
-            return View();
-        }
+       
         #region Login/Logout
         [HttpGet]
         [AllowAnonymous]
@@ -49,7 +46,6 @@ namespace ActivitySystem.Controllers
             {
                 return View();
             }
-
         }
         #region Encryption
         public string Encrypt(string password)
@@ -101,7 +97,6 @@ namespace ActivitySystem.Controllers
                 return View();
             }
             return View();
-
         }
         [HttpGet]
         public async Task<IActionResult> Logout()
@@ -109,11 +104,8 @@ namespace ActivitySystem.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction(nameof(AccountController.Login), "Account");
         }
-
-
         #endregion Login/Logout
         public IActionResult LogIn()
-
         {
             return View();
         }
@@ -228,10 +220,7 @@ namespace ActivitySystem.Controllers
                     ViewData["Falied"] = "The Email is not sent succussfuly";
             }
             else
-            {
-                ViewData["Falied"] = "Problem in processing request";
-                ViewData["NoRedirect"] = "No Redirect";
-            }
+                ViewData["WrongEmail"] = "This email was not found";
             return View();
         }
         public IActionResult ForgatPassword()
@@ -246,7 +235,6 @@ namespace ActivitySystem.Controllers
         {
             try 
             {
-
                     string EncryptedPassword = Encrypt(UserInfo.Password);
                     int CheckResult = UsersInformation.ForgatPassword(UserInfo, EncryptedPassword);
                     if (CheckResult == 1) {
@@ -260,15 +248,12 @@ namespace ActivitySystem.Controllers
             }
             return View();
         }
-
-
-
-
-
-        public IActionResult Profile()
+        public IActionResult Index()
         {
-
+            if(User.Identity.IsAuthenticated == true)
             return View(UsersInformation.GetUserById(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)));
+            else
+                return RedirectToAction("LogIn", "Account");
         }
         
         public IActionResult ChangeUserPassword()
@@ -325,10 +310,8 @@ namespace ActivitySystem.Controllers
             catch
             {
                 ViewData["Failed"] = "An Error Occurred while processing your request, please try again Later";
-                
             }
             return View();
-
         }
         #region email
         public int emailSending(string emailTo, string code)
@@ -345,11 +328,13 @@ namespace ActivitySystem.Controllers
                 mailMessage.From = new MailAddress("ActivitySystemCCSIT@gmail.com");
                 //mailMessage.To.Add(emailTo);
                 mailMessage.To.Add(emailTo);
+                mailMessage.IsBodyHtml = true;
+
+                //mailMessage.Body = "This is the code for verification: " + code + " please enter it in the code verification page";
+                mailMessage.Body = "<div class=\"row\"> <h3>This is the code for verification:</h3> <h3 style = \"color:red\" > "+code+" </h3><br/><h3>please enter it in the code verification page</h3></div>";
 
 
-
-                mailMessage.Body = "This is the new Password:" + code + "  please change it after your first login.";
-                mailMessage.Subject = "Activty reset password";
+                mailMessage.Subject = "Email Verfication";
                 client.Send(mailMessage);
                 return 1;
             }

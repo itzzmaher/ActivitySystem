@@ -16,10 +16,17 @@
                     Swal.fire(result,'','success')
                     </Text>
                 }
-                else if (@ViewData["Falied"] != null && ViewData["NoRedirect"] != null)
+                else if (@ViewData["Falied"] != null)
                 {
                     <Text>
                     var result = '@Html.Raw(ViewData["Falied"])';
+                    Swal.fire(result, '', 'error')
+                    </Text>
+                    }
+                    else if (@ViewData["WrongEmail"] != null)
+                {
+                    <Text>
+                    var result = '@Html.Raw(ViewData["WrongEmail"])';
                     Swal.fire(result, '', 'error')
                     </Text>
                     }

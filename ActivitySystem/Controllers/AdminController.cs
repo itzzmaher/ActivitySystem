@@ -374,7 +374,7 @@ namespace ActivitySystem.Controllers
         {
             try
             {
-                 string EncryptedPassword = UsersInformation.Encrypt(UserInfo.Password);
+                 string EncryptedPassword = new AccountController().Encrypt(UserInfo.Password);
                  UsersInformation.ActivateUser(UserInfo, EncryptedPassword);
                  ViewData["Successful"] = "User Activated Successfully";
             }

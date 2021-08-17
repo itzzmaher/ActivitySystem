@@ -204,18 +204,5 @@ namespace ActivitySystem.Repository
             }
             
         }
-        #region Encryption
-        public string Encrypt(string password)
-        {
-            string salt = "Activities";
-            string GenPass = password + salt;
-            using (MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider())
-            {
-                UTF8Encoding utf8 = new UTF8Encoding();
-                byte[] data = md5.ComputeHash(utf8.GetBytes(GenPass));
-                return Convert.ToBase64String(data);
-            }
-        }
-        #endregion Encryption
     }
 }
