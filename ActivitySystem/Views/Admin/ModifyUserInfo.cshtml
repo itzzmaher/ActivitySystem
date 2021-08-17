@@ -1,16 +1,40 @@
 ﻿@model ActivitySystem.Models.tblUsers
+<script>
+     @{
+        if (@ViewData["Successful"] != null)
+        {
+            <Text>
+            var result = '@Html.Raw(ViewData["Successful"])';
+            Swal.fire(result,'','success')
+            .then(
+            function () {
+            window.location.href = '@Url.Action("Index", "Admin")';
+            }
+            );
+            </Text>
+        }
+        else if (@ViewData["Falied"] != null)
+        {
+            <Text>
+            var result = '@Html.Raw(ViewData["Falied"])';
+            Swal.fire(result, '', 'error');
+            </Text>
+        }
+    }
+</script>
 <div class="card">
     <div class="card-header">
         <h3>User Profile</h3>
     </div>
-
+   
     <div class="card-body">
 
-        <form id="form">
+        <form asp-action="ModifyUserInfo" id="form">
             <div class="row">
                 <div class="col-md-6">
                     <label class="col-form-label">Full Name</label>
                     <input type="text" asp-for="Name" class="form-control">
+                    <input type="text" hidden asp-for="GuId" class="form-control">
                 </div>
             </div>
 
@@ -35,10 +59,9 @@
             <br />
             <div class="row">
                 <div class="col-md-12 " style="text-align: left;">
-                    <a asp-action="ModifyUserInfo" asp-controller="Admin" class="btn btn-dark btn-search"> Edit </a>
+                    <button type="submit" class="btn btn-dark btn-search" onclick=" return Valdation()"> Edit </button>
                 </div>
             </div>
-
         </form>
     </div>
 </div>

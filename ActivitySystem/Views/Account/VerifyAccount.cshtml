@@ -1,11 +1,8 @@
 ﻿@model ActivitySystem.Models.tblUsers
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/MyLayout.cshtml";
 }
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="~/css/styles.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
@@ -19,39 +16,23 @@
 
     <script>
                 @{
-                if (@ViewData["Successful"] != null)
-                {
-                    <Text>
-                    var result = '@Html.Raw(ViewData["Successful"])';
-                    Swal.fire(result,'','success')
-                        .then(
-                            function () {
-                                window.location.href = '@Url.Action("ActivateAccount","Account")';
-                            }
-                        );
-                    </Text>
-                }
-                else if (@ViewData["Falied"] != null && ViewData["NoRedirect"] == null)
+                if (@ViewData["Falied"] != null && ViewData["NoRedirect"] == null)
                 {
                     <Text>
                     var result = '@Html.Raw(ViewData["Falied"])';
                     Swal.fire(result, '', 'error')
-                        .then(
-                            function () {
-                                window.location.href = '@Url.Action("LogIn", "Account")';
-                            }
-                        );
+
                     </Text>
-                    }
-                    else if(@ViewData["Falied"] != null && ViewData["NoRedirect"] != null)
-                    {
+                }
+                else if(@ViewData["Falied"] != null && ViewData["NoRedirect"] != null)
+                {
                     <Text>
                     var result = '@Html.Raw(ViewData["Falied"])';
                     Swal.fire(result, '', 'error');
                     </Text>
                     }
-                    else if(@ViewData["Verified"] != null )
-                    {
+                else if(@ViewData["Verified"] != null )
+                {
                     <Text>
                     var result = '@Html.Raw(ViewData["Verified"])';
                     Swal.fire(result, '', 'error');
@@ -59,8 +40,8 @@
                     }
             }
     </script>
-</head>
-<body>
+
+
     <div class="container">
         <div id="v-card" class="row justify-content-center" style="margin-top: 124px;">
             <div class="card o-hidden border-0 shadow-lg my-5 col-xl-7 col-lg-7 col-md-7">
@@ -85,6 +66,3 @@
             </div>
         </div>
     </div>
-
-</body>
-</html>

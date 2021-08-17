@@ -1,14 +1,9 @@
-﻿
-@model ActivitySystem.Models.tblUsers
+﻿@model ActivitySystem.Models.tblUsers
+@{
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+<script>
 
-
-<script src="~/js/Validation.js"></script>
-<div class="card">
-    <div class="card-header">
-        <h3>Activate User</h3>
-    </div>
-    <div class="card-body">
-        <script>
                 @{
                 if (@ViewData["Successful"] != null)
                 {
@@ -17,7 +12,7 @@
                     Swal.fire(result,'','success')
                         .then(
                             function () {
-                                window.location.href = '@Url.Action("Login","Account")';
+                                window.location.href = '@Url.Action("LogIn", "Account")';
                             }
                         );
                     </Text>
@@ -27,66 +22,81 @@
                     <Text>
                     var result = '@Html.Raw(ViewData["Falied"])';
                     Swal.fire(result, '', 'error')
-                        .then(
-                            function () {
-                                window.location.href = '@Url.Action("Index", "Account")';
-                            }
-                        );
-                    </Text>
-                    }
-                    else if(@ViewData["Falied"] != null && ViewData["NoRedirect"] != null)
-                    {
-                    <Text>
-                    var result = '@Html.Raw(ViewData["Falied"])';
-                    Swal.fire(result, '', 'error');
                     </Text>
                     }
             }
-        </script>
-        <form asp-action="ActivateAccount" id="form">
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="col-form-label">
-                        Full Name
-                    </label>
-                    <input type="text" asp-for="Name" class="form-control">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="col-form-label">KFU Email</label>
-                    <input type="text" readonly asp-for="KfuEmail" class="form-control">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="col-form-label">CollegeName</label>
-                    <input type="text" readonly asp-for="College.CollegeName" class="form-control">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="col-form-label">New Password</label>
-                    <input type="password" asp-for="Password" class="form-control">
-                    <input hidden type="text" asp-for="GuId" readonly class="form-control">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="col-form-label">Confirm Password</label>
-                    <input type="password" name="ConfirmedPassword" class="form-control">
-                    @if (ViewBag.Error == 1)
-                    {
-                        <div class="row"><p style="color:red"> New Password and old password don't match </p></div>}
-                </div>
-            </div>
-            <br />
-            <div class="row">
-                <div class="col-md-12 " style="text-align: left;">
-                    <button type="submit" class="btn btn-dark btn-search" onclick="return Valdation()"> Activate </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+    </script>
 
+<body>
+    <div class="card-body">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-7">
+                    <div class="card shadow-lg border-0 rounded-lg mt-5">
+                        <div class="card-header"><h3 class="text-center font-weight-light my-4">Activate Account</h3></div>
+                        <div class="card-body">
+                            <form asp-action="ActivateAccount" id="form">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="col-form-label">
+                                            Full Name
+                                        </label>
+                                        <input type="text" asp-for="Name" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="col-form-label">KFU Email</label>
+                                        <input type="text" readonly asp-for="KfuEmail" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="col-form-label">CollegeName</label>
+                                        <input type="text" readonly asp-for="College.CollegeName" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="col-form-label">New Password</label>
+                                        <input type="password" asp-for="Password" class="form-control" id="password">
+                                        <input hidden type="text" asp-for="GuId" readonly class="form-control">
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="col-form-label">Confirm Password</label>
+                                        <input type="password" class="form-control" id="confirm_password">
+                                        <div style="margin-top: 7px;" id="CheckPasswordMatch"></div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-12 " style="text-align: left;">
+                                        <button type="submit" id="submit" class="btn btn-dark btn-search" onclick="return Valdation()"> Activate </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#submit").click(function () {
+            var password = $("#password").val();
+            var confirmPassword = $("#confirm_password").val();
+            if (password != confirmPassword) {
+                $("#CheckPasswordMatch").html("Password does not match !").css("color", "red");
+                return false;
+            }
+        });
+    });
+</script>
