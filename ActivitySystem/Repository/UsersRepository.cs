@@ -170,6 +170,24 @@ namespace ActivitySystem.Repository
 
             return null;
         }
+        public int UpdateUserInfoByAdmin(tblUsers UserInfo)
+        {
+            try
+            {
+                tblUsers UserByGuId = GetUserByGuId(UserInfo.GuId);
+                UserByGuId.Name = UserInfo.Name;
+                UserByGuId.KfuEmail = UserInfo.KfuEmail;
+                UserByGuId.RoleId = UserInfo.RoleId;
+                UserByGuId.CollegeId = UserInfo.CollegeId;
+                _context.Entry(UserByGuId).State = EntityState.Modified;
+                _context.SaveChanges();
+                return 1;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
         public int ChangePassword(int AccountID, string password)
         {
             try

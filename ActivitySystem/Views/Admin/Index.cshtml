@@ -30,7 +30,7 @@
                                             }
                                             else
                                             {
-                                                <a asp-controller="Admin" asp-action="DeactivateUser" asp-route-id="@item.GuId" class="btn btn-outline-danger">Activate </a>
+                                                <a asp-controller="Admin" asp-action="AdminActivate" asp-route-id="@item.GuId" class="btn btn-outline-danger">Activate </a>
                                             }
                                         </td>
                                         <td><a asp-controller="Admin" asp-action="ModifyUserInfo" asp-route-id="@item.GuId" class="btn btn-outline-secondary">Modify</a></td>

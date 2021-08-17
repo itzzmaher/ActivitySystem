@@ -260,6 +260,23 @@ namespace ActivitySystem.Controllers
             }
             return View(UsersInformation.GetUserByGuId(id));
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ModifyUserInfo(tblUsers UserInfo)
+        {
+            try
+            {
+                int CheckResult = UsersInformation.UpdateUserInfoByAdmin(UserInfo);
+                if (CheckResult == 1) { 
+                    ViewData["Successful"] = "User information was modified successfully";
+                }
+            }
+            catch
+            {
+                ViewData["Falied"] = "An Error Occurred while processing your request, please try again Later";
+            }
+            return View();
+        }
         public IActionResult RemoveSemester(Guid id)
         {
             try
@@ -278,30 +295,25 @@ namespace ActivitySystem.Controllers
         public IActionResult DeactivateUser(Guid id)
         {
             tblUsers UserInfo = UsersInformation.GetUserByGuId(id);
-            if (UserInfo.IsActive == true)
-            {
+          
                 int CheckResult = UsersInformation.DeactivateUser(UserInfo);
                 if(CheckResult == 1) { 
                 TempData["Success"] = "Account has been deactivated successfully";
                 TempData.Keep("Success");
                 return RedirectToAction("Index", "Admin");
                 }
-                else
-                {
-                    return RedirectToAction("Index", "Admin");
-                }
-            }
+                
             else
             {
-                TempData["GuId"] = UserInfo.GuId;
-                TempData.Keep("GuId");
-                return RedirectToAction(nameof(AdminActivate));
+                TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                TempData.Keep("Failled");
+                return RedirectToAction("Index", "Admin");
             }
         }
-        public IActionResult AdminActivate()
+        public IActionResult AdminActivate(Guid id)
         {
-            Guid guid = Guid.Parse(TempData["GuId"].ToString());
-            tblUsers userInfo = UsersInformation.GetUserByGuId(guid);
+
+            tblUsers userInfo = UsersInformation.GetUserByGuId(id);
             ViewData["RoleId"] = new SelectList(UsersInformation.GetAllRoles(), "Id", "RoleName");
             ViewData["CollegeId"] = new SelectList(UsersInformation.GetAllColleges(), "Id", "CollegeName");
             return View(userInfo);

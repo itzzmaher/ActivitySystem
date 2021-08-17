@@ -119,27 +119,21 @@ namespace ActivitySystem.Controllers
         }
         public IActionResult ActivateAccount()
         {
+            TempData.Keep("GuId");
             Guid guid = Guid.Parse(TempData["GuId"].ToString());
             tblUsers userInfo = UsersInformation.GetUserByGuId(guid);
             return View(userInfo);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ActivateAccount(tblUsers UserInfo, string ConfirmedPassword)
+        public IActionResult ActivateAccount(tblUsers UserInfo)
         {
             try {
 
-
-                if (UserInfo.Password != ConfirmedPassword)
-                {
-                    ViewBag.Error = 1;
-                }
-                else { 
                 string EncryptedPassword = Encrypt(UserInfo.Password);
                 UsersInformation.ActivateUser(UserInfo, EncryptedPassword);
                 ViewData["Successful"] = "User Activated Successfully";}
               
-            }
             catch
             {
                 ViewData["Falied"] = "An Error Occurred while processing your request, please try again Later";
@@ -157,30 +151,33 @@ namespace ActivitySystem.Controllers
             tblUsers StudentEmailFound = UsersInformation.checkemailuserforRecoverPassword(KfuEmail);
             if (StudentEmailFound != null)
             {
+                if(StudentEmailFound.IsActive == true) {
+                    ViewData["Verified"] = "Your account is verified";
+                }
+                else { 
                 Random random = new Random();
                 string code = random.Next(100000, 999999).ToString();
                 int check = emailSending(StudentEmailFound.KfuEmail, code);
                 if (check == 1)
                 {
-                    ViewData["Successful"] = "The Code is sent to your Email ";
                     TempData["Code"] = code;
                     TempData.Keep("Code");
                     TempData["Page"] = "ActivateAccount";
                     TempData.Keep("Page");
                     TempData["GuId"] = StudentEmailFound.GuId;
                     TempData.Keep("GuId");
-
                     return RedirectToAction(nameof(Code));
-                }
+                            }
+                        
                 else
-                    ViewData["Falied"] = "The Email is not sent succussfuly";
+                    ViewData["Falied"] = "The code is not sent succussfuly";
+            }
             }
             else
             {
                 ViewData["Falied"] = "Problem in processing request";
                 ViewData["NoRedirect"] = "No Redirect";
             }
-            //return RedirectToAction(nameof(Activate), new { id = id });
             return View();
         }
         public IActionResult Code()
@@ -249,16 +246,12 @@ namespace ActivitySystem.Controllers
         {
             try 
             {
-                if (UserInfo.Password != ConfirmedPassword)
-                {
-                    ViewBag.Error = 1;
-                }
-                else
-                {
+
                     string EncryptedPassword = Encrypt(UserInfo.Password);
                     int CheckResult = UsersInformation.ForgatPassword(UserInfo, EncryptedPassword);
-                    if (CheckResult == 1)
-                        return RedirectToAction("Index", "Home");
+                    if (CheckResult == 1) {
+                    ViewData["Successful"] = "Your password has been changed successfully";
+                    return View();
                 }
             }
             catch
@@ -285,7 +278,7 @@ namespace ActivitySystem.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ChangeUserPassword(tblUsers UserInfo, string NewPassword, string ConfirmedPassword)
+        public IActionResult ChangeUserPassword(tblUsers UserInfo, string NewPassword)
         {
             try
             {
@@ -295,10 +288,7 @@ namespace ActivitySystem.Controllers
                 if (CheckResult == 0)
                 {
                     ViewBag.Error = 2;
-                }
-                else if (NewPassword != ConfirmedPassword)
-                {
-                    ViewBag.Error = 1;
+                    return View();
                 }
                 else
                 {

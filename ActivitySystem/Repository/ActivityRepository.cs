@@ -67,7 +67,7 @@ namespace ActivitySystem.Repository
                 ActivityByGuid.RegisterEndDate = ActivityInfo.RegisterEndDate;
                 ActivityByGuid.Content = ActivityInfo.Content;
                 ActivityLogInsert(ActivityByGuid);
-                _context.Update(ActivityByGuid);
+                _context.Entry(ActivityByGuid).State = EntityState.Modified;
                 _context.SaveChanges();
                 return 1; // Updated Successfuly
             }
