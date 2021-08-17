@@ -56,6 +56,7 @@ namespace ActivitySystem.Repository
         {
             try
             {
+
                 tblActivities ActivityByGuid = GetActivityByGuId(ActivityInfo.GuId);
                 ActivityByGuid.ActivityName = ActivityInfo.ActivityName;
                 ActivityByGuid.MaxStudents = ActivityInfo.MaxStudents; 
