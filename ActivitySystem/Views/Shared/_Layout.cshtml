@@ -52,65 +52,71 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading"></div>
-                        @if (User.Identity.IsAuthenticated) { 
-
-                        if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                        @if (User.Identity.IsAuthenticated)
                         {
 
-                            <a class="nav-link" href="/Admin">
-                                <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
-                                Home
-                            </a>
-                            <div class="border-top my-3"></div>
-                            <div class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle " href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-school"></i></div>
-                                    Manage Activites
+                            if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+                            {
+
+                                <a class="nav-link" href="/Admin">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
+                                    Home
                                 </a>
-                                <ul class="dropdown-menu">
+                                <div class="border-top my-3"></div>
+                                <div class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle " href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div class="sb-nav-link-icon"><i class="fas fa-school"></i></div>
+                                        Manage Activites
+                                    </a>
+                                    <ul class="dropdown-menu">
 
-                                    <li><a class="dropdown-item" href="/Admin/AddActivity">Add Activity</a></li>
-                                    <li><a class="dropdown-item" href="/Admin/ViewActivities">View All Activities</a></li>
-                                </ul>
-                            </div>
-                            <div class="border-top my-3"></div>
-                            <a class="nav-link" href="/Admin/InsertAccount">
-                                <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-                                Add Account
-                            </a>
+                                        <li><a class="dropdown-item" href="/Admin/AddActivity">Add Activity</a></li>
+                                        <li><a class="dropdown-item" href="/Admin/ViewActivities">View All Activities</a></li>
+                                    </ul>
+                                </div>
+                                <div class="border-top my-3"></div>
+                                <a class="nav-link" href="/Admin/InsertAccount">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                                    Add Account
+                                </a>
+                                <div class="border-top my-3"></div>
+                                <a class="nav-link" href="/Admin/ViewSemesters">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                                    View Semesters
+                                </a>
 
-                        }
-                        else if (User.IsInRole("Instructor"))
-                        {
-                            <a class="nav-link" href="/Instructor">
-                                <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
-                                Instructor Home
-                            </a>
-                            <div class="border-top my-3"></div>
-                            <a class="nav-link" href="/Instructor/RegisterApproval">
-                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-check"></i></div>
-                                Manage Current Registrations
-                            </a>
-                        }
-                        else if (User.IsInRole("Student"))
-                        {
-                            <a class="nav-link" href="/Student">
+                            }
+                            else if (User.IsInRole("Instructor"))
+                            {
+                                <a class="nav-link" href="/Instructor">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
+                                    Instructor Home
+                                </a>
+                                <div class="border-top my-3"></div>
+                                <a class="nav-link" href="/Instructor/RegisterApproval">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-calendar-check"></i></div>
+                                    Manage Current Registrations
+                                </a>
+                            }
+                            else if (User.IsInRole("Student"))
+                            {
+                                <a class="nav-link" href="/Student">
 
-                                <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
-                                Student Home
-                            </a>
-                            <div class="border-top my-3"></div>
-                            <a class="nav-link" href="/Student/ActivityBrowse">
-                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-check"></i></div>
-                                Browse Activities
-                            </a>
-                            <div class="border-top my-3"></div>
-                            <a class="nav-link" href="/Student/CancelRegisteration">
-                                <div class="sb-nav-link-icon"><i class="fas fa-calendar-check"></i></div>
-                                Manage Current Registrations
-                            </a>
+                                    <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
+                                    Student Home
+                                </a>
+                                <div class="border-top my-3"></div>
+                                <a class="nav-link" href="/Student/ActivityBrowse">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-calendar-check"></i></div>
+                                    Browse Activities
+                                </a>
+                                <div class="border-top my-3"></div>
+                                <a class="nav-link" href="/Student/CancelRegisteration">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-calendar-check"></i></div>
+                                    Manage Current Registrations
+                                </a>
 
-                        }
+                            }
                         }
 
                     </div>

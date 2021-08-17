@@ -30,7 +30,7 @@
 }
     </script>
     <div class="card-body">
-        <form asp-action="ChangeName">
+        <form asp-action="ChangeName" id="form">
             <div class="row">
                 <div class="col-md-6">
                     <label class="col-form-label">Full Name</label>
@@ -40,7 +40,7 @@
             <br />
             <div class="row">
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-dark btn-search">Change Your Name</button>
+                    <button type="submit" class="btn btn-dark btn-search" onclick="return Valdation()">Change Your Name</button>
                 </div>
             </div>
         </form>

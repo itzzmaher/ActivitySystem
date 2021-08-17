@@ -38,11 +38,11 @@
                         <div class="col-md-8">
                             <div class="p-5">
                                 <h1 class="text-center h4 text-gray-900 mb-4" style="font-size: 120%;">Email Verification</h1>
-                                <form asp-action="EmailCheck">
+                                <form asp-action="EmailCheck" id="form">
                                     <div id="email-form-group" class="form-group">
                                         <h1 class="text-center h4 text-gray-600 mb-4" style="font-size: 12px;">Enter your KFU email</h1>
                                         <input name="email" id="email" type="email" class="text-center form-control" placeholder="id@kfu.edu.sa">
-                                        <button type="submit" id="send-btn" class="btn btn-dark" style="margin-left: 130px; margin-top: 20px;">send</button>
+                                        <button type="submit" id="send-btn" class="btn btn-dark" style="margin-left: 130px; margin-top: 20px;" onclick="return Valdation()">send</button>
                                     </div>
 
                                 </form>

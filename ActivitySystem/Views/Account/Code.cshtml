@@ -35,11 +35,11 @@
                         <div class="col-md-8">
                             <div class="p-5">
                                 <h1 class="text-center h4 text-gray-900 mb-4" style="font-size: 120%;">Email Verification</h1>
-                                <form asp-action="Code">
+                                <form asp-action="Code" id="form">
                                     <div id="verification-form-group" class="form-group">
                                         <h1 class="text-center h4 text-gray-600 mb-4" style="font-size: 14px;">enter the code sent to your KFU email</h1>
                                         <input name="codeInput" id="code" type="number" class="text-center form-control" placeholder="XXXXXX">
-                                        <button type="submit" style="margin-top:10px;" class="btn btn-primary">Verify</button>
+                                        <button type="submit" style="margin-top:10px;" class="btn btn-primary" onclick="return Valdation()">Verify</button>
                                         <h1 id="errormsg" hidden class="text-center h4 " style="font-size: 12px; color: red">incorrect enter the code  again </h1>
                                     </div>
                                 </form>

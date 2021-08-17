@@ -15,32 +15,43 @@ namespace ActivitySystem.Controllers
     public class InstructorController : Controller
     {
         ActivityRepository ActivityInformation = new ActivityRepository();
-        //public IActionResult Index()
-        //{
-        //    return View(ActivityInformation.GetAllActiveActivities(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)));
-        //}
-        public IActionResult ActiveState(Guid? id, string status)
+
+        public IActionResult ActivateActivty(Guid? id)
         {
             try
             {
-
-                bool st = true;
-                if (status == "Deactivate")
-                {
-                    st = false;
-                }
-                int checkResult = ActivityInformation.ChangeSt(id);
+                int checkResult = ActivityInformation.ActivateActivity(id);
                 if (checkResult == 1) {
                     TempData["Success"] = "Activity has been Activated Successfully";
                     TempData.Keep("Success");
                     return RedirectToAction("Index", "Instructor");
                 }
-                else if (checkResult == 2) {
-                    TempData["Success"] = "Activity has been Dectivated Successfully ";
+                else {
+                    TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                    TempData.Keep("Failled");
+                    return RedirectToAction("Index", "Instructor");
+                }
+            }
+            catch
+            {
+                TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                TempData.Keep("Failled");
+                return RedirectToAction("Index", "Instructor");
+            }
+        }
+        public IActionResult DeactivateActivty(Guid? id)
+        {
+            try
+            {
+                int checkResult = ActivityInformation.DeactivateActivity(id);
+                if (checkResult == 1)
+                {
+                    TempData["Success"] = "Activity has been deactivated Successfully";
                     TempData.Keep("Success");
                     return RedirectToAction("Index", "Instructor");
                 }
-                else {
+                else
+                {
                     TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
                     TempData.Keep("Failled");
                     return RedirectToAction("Index", "Instructor");
@@ -95,13 +106,13 @@ namespace ActivitySystem.Controllers
                 int checkResult = ActivityInformation.ActivityApproval(id, statusid);
                 if (checkResult == 1)
                 {
-                    TempData["Success"] = "You approved the student Successfully";
+                    TempData["Success"] = "You approved the student successfully";
                     TempData.Keep("Success");
                     return RedirectToAction("RegisterApproval", "Instructor");
                 }
                 else if (checkResult == 2)
                 {
-                    TempData["Success"] = "You denied the student Successfully";
+                    TempData["Success"] = "You denied the student successfully";
                     TempData.Keep("Success");
                     return RedirectToAction("RegisterApproval", "Instructor");
                 }
@@ -125,19 +136,44 @@ namespace ActivitySystem.Controllers
             ViewData["Failled"] = TempData["Failled"];
             return View(ActivityInformation.GetAllActiveActivities(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)));
         }
-        public IActionResult UpdateStatus(Guid? id)
+        public IActionResult OpenActivty(Guid? id)
         {
             try
             {
-                int checkResult = ActivityInformation.ChangeStatus(id);
+                int checkResult = ActivityInformation.OpenActivty(id);
                 if (checkResult == 1) {
-                    TempData["Success"] = "Activity has been Opened Successfully";
+                    TempData["Success"] = "Activity has been opened successfully";
                     TempData.Keep("Success");
                     return RedirectToAction("index", "Instructor");}
                 else
                 {
-                    TempData["Success"] = "Activity has been Closed Successfully";
+                    TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                    TempData.Keep("Failled");
+                    return RedirectToAction("index", "Instructor");
+                }
+            }
+            catch
+            {
+                TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                TempData.Keep("Failled");
+                return RedirectToAction("index", "Instructor");
+            }
+        }
+        public IActionResult CloseActivty(Guid? id)
+        {
+            try
+            {
+                int checkResult = ActivityInformation.CloseActivty(id);
+                if (checkResult == 1)
+                {
+                    TempData["Success"] = "Activity has been closed successfully";
                     TempData.Keep("Success");
+                    return RedirectToAction("index", "Instructor");
+                }
+                else
+                {
+                    TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                    TempData.Keep("Failled");
                     return RedirectToAction("index", "Instructor");
                 }
             }

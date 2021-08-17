@@ -30,7 +30,7 @@
 
 <div class="card-body">
     <div id="v-card" class="row justify-content-center" style="margin-top: 24px;">
-        <div class="col-md-6 ">
+        <div class="col-md-7 ">
             <table id="datatablesSimple">
                 <thead>
                     <tr>
@@ -60,19 +60,20 @@
                                 <td>
                                     @if (item.IsDone == false)
                                     {
-                                        <a asp-controller="Admin" asp-action="RemoveSemester" asp-route-id="@item.GuId" asp-route-status="Deactivate" class="btn btn-outline-secondary">Deactivate </a>
+                                        <a asp-controller="Admin" asp-action="RemoveSemester" asp-route-id="@item.GuId" asp-route-status="Deactivate" class="btn btn-outline-danger">Delete </a>
                                     }
 
                                 </td>
                             </tr>
                             i++;
-                        } }
+                        }
+                        }
                 </tbody>
             </table>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8"></div>
-        <div class="col-md-2"><a asp-controller="Admin" asp-action="AddSemester" class="btn btn-outline-secondary">Add Semester</a></div>
+        <div class="col-md-8" style="margin-right:58px;"></div>
+        <div class="col-md-2"><a asp-controller="Admin" asp-action="AddSemester" class="btn btn-outline-primary ">Add Semester</a></div>
     </div>
 </div>

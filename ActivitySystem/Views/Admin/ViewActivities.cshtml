@@ -23,21 +23,21 @@
                                 <td>
                                     @if (@item.IsOpen == true)
                                     {
-                                        <a asp-controller="Admin" asp-action="UpdateStatus" asp-route-id="@item.GuId" asp-route-status="Close" class="btn btn-outline-success">Close </a>
+                                        <a asp-controller="Admin" asp-action="CloseActivty" asp-route-id="@item.GuId" class="btn btn-outline-success">Close </a>
                                     }
                                     else
                                     {
-                                        <a asp-controller="Admin" asp-action="UpdateStatus" asp-route-id="@item.GuId" asp-route-status="Open" class="btn btn-outline-danger">Open </a>
+                                        <a asp-controller="Admin" asp-action="OpenActivty" asp-route-id="@item.GuId"class="btn btn-outline-danger">Open </a>
                                     }
 
 
                                     @if (item.IsActive == true)
                                     {
-                                        <a asp-controller="Admin" asp-action="ActiveState" asp-route-id="@item.GuId" asp-route-status="Deactivate" class="btn btn-outline-secondary">Deactivate </a>
+                                        <a asp-controller="Admin" asp-action="DeactivateActivty" asp-route-id="@item.GuId" class="btn btn-outline-secondary">Deactivate </a>
                                     }
                                     else
                                     {
-                                        <a asp-controller="Admin" asp-action="ActiveState" asp-route-id="@item.GuId" asp-route-status="Activate" class="btn btn-outline-secondary">Activate </a>
+                                        <a asp-controller="Admin" asp-action="ActivateActivty" asp-route-id="@item.GuId" class="btn btn-outline-secondary">Activate </a>
                                     }
                                 </td>
                                 <td><a asp-controller="Admin" asp-action="AdminUpdateActivity" asp-route-id=@item.GuId class="btn btn-outline-secondary">Update</a></td>

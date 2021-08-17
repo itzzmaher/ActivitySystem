@@ -36,10 +36,10 @@ namespace ActivitySystem.Controllers
             ViewData["NumberOfAdmins"] = UsersInformation.GetAllAdmins().Count();
             return View();
         }
-        public IActionResult ViewSemesters(string msgsuccess, string msgfail)
+        public IActionResult ViewSemesters()
         {
-            ViewData["Successful"] = msgsuccess;
-            ViewData["Falied"] = msgfail;
+            ViewData["Successful"] = TempData["Success"];
+            ViewData["Failled"] = TempData["Failled"];
             return View(ActivityInformation.GetAllSemesters());
         }
         public IActionResult AddSemester()
@@ -138,46 +138,40 @@ namespace ActivitySystem.Controllers
                 int CheckResult = ActivityInformation.SemesterActivation(id, status);
                 if (CheckResult == 1)
                 {
-                    return RedirectToAction("ViewSemesters", "Admin", new { msgsuccess = "Semeter has been activated Successfully", msgfail = "" });
+                    TempData["Success"] = "Semeter has been activated Successfully";
+                    TempData.Keep("Success");
+                    return RedirectToAction("ViewSemesters", "Admin");
                     
                 }
                 else if (CheckResult == 2)
                 {
-
-                    return RedirectToAction("ViewSemesters", "Admin", new { msgsuccess = "Semeter has been deactivated Successfully", msgfail = "" });
+                    TempData["Success"] = "Semeter has been deactivated Successfully";
+                    TempData.Keep("Success");
+                    return RedirectToAction("ViewSemesters", "Admin");
                 }
                 else
                 {
-                    return RedirectToAction("ViewSemesters", "Admin", new { msgsuccess = "", msgfail = "An Error Occurred while processing your request, please try again Later" });
+                    TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                    TempData.Keep("Failled");
+                    return RedirectToAction("ViewSemesters", "Admin");
                 }
             }
             catch
             {
-
-                return RedirectToAction("ViewSemesters", "Admin", new { msgsuccess = "", msgfail = "An Error Occurred while processing your request, please try again Later" });
+                TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                TempData.Keep("Failled");
+                return RedirectToAction("ViewSemesters", "Admin");
             }
           
         }
 
-        public IActionResult ActiveState(Guid? id, string status)
+        public IActionResult ActivateActivty(Guid? id)
         {
             try
             {
-
-                bool st = true;
-                if (status == "Deactivate")
-                {
-                    st = false;
-                }
-                int checkResult = ActivityInformation.ChangeSt(id);
+                int checkResult = ActivityInformation.ActivateActivity(id);
                 if (checkResult == 1){
                     TempData["Success"] = "Activity has been Activated Successfully";
-                    TempData.Keep("Success");
-                    return RedirectToAction("ViewActivities", "Admin");
-                }
-
-                else if (checkResult == 2) {
-                    TempData["Success"] = "Activity has been Dectivated Successfully ";
                     TempData.Keep("Success");
                     return RedirectToAction("ViewActivities", "Admin");
                 }
@@ -194,7 +188,31 @@ namespace ActivitySystem.Controllers
                 return RedirectToAction("ViewActivities", "Admin");
             }
         }
-
+        public IActionResult DeactivateActivty(Guid? id)
+        {
+            try
+            {
+                int checkResult = ActivityInformation.DeactivateActivity(id);
+                if (checkResult == 1)
+                {
+                    TempData["Success"] = "Activity has been deactivated Successfully";
+                    TempData.Keep("Success");
+                    return RedirectToAction("ViewActivities", "Admin");
+                }
+                else
+                {
+                    TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                    TempData.Keep("Failled");
+                    return RedirectToAction("ViewActivities", "Admin");
+                }
+            }
+            catch
+            {
+                TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                TempData.Keep("Failled");
+                return RedirectToAction("ViewActivities", "Admin");
+            }
+        }
         public IActionResult AdminUpdateActivity(Guid? id)
         {
             var ActivityInfo = ActivityInformation.GetActivityByGuId(id);
@@ -219,23 +237,46 @@ namespace ActivitySystem.Controllers
             }
             return View();
         }
-        public IActionResult UpdateStatus(Guid? id)
+        public IActionResult OpenActivty(Guid? id)
         {
             try
             {
-
-
-                int checkResult = ActivityInformation.ChangeStatus(id);
+                int checkResult = ActivityInformation.OpenActivty(id);
                 if (checkResult == 1)
                 {
-                    TempData["Success"] = "Activity has been Opened Successfully";
+                    TempData["Success"] = "Activity has been opened successfully";
                     TempData.Keep("Success");
                     return RedirectToAction("ViewActivities", "Admin");
                 }
                 else
                 {
-                    TempData["Success"] = "Activity has been Closed Successfully";
+                    TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                    TempData.Keep("Failled");
+                    return RedirectToAction("ViewActivities", "Admin");
+                }
+            }
+            catch
+            {
+                TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                TempData.Keep("Failled");
+                return RedirectToAction("ViewActivities", "Admin");
+            }
+        }
+        public IActionResult CloseActivty(Guid? id)
+        {
+            try
+            {
+                int checkResult = ActivityInformation.CloseActivty(id);
+                if (checkResult == 1)
+                {
+                    TempData["Success"] = "Activity has been closed successfully";
                     TempData.Keep("Success");
+                    return RedirectToAction("ViewActivities", "Admin");
+                }
+                else
+                {
+                    TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                    TempData.Keep("Failled");
                     return RedirectToAction("ViewActivities", "Admin");
                 }
             }
@@ -282,14 +323,23 @@ namespace ActivitySystem.Controllers
             try
             {
                 int CheckResult = ActivityInformation.SemesterDelete(id);
-                if (CheckResult == 1)
-                    return RedirectToAction("ViewSemesters", "Admin", new { msgsuccess = "Semeter has been Deleted Successfully", msgfail = "" });
-                else 
-                    return RedirectToAction("ViewSemesters", "Admin", new { msgsuccess = "", msgfail = "An Error Occurred while processing your request, please try again Later" });
+                if (CheckResult == 1) { 
+                    TempData["Success"] = "Semeter has been Deleted Successfully";
+                TempData.Keep("Success");
+                return RedirectToAction("ViewSemesters", "Admin");
+                }
+                else
+                {
+                    TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                    TempData.Keep("Failled");
+                    return RedirectToAction("ViewSemesters", "Admin");
+                }  
             }
             catch
             {
-                return RedirectToAction("ViewSemesters", "Admin", new { msgsuccess = "", msgfail = "An Error Occurred while processing your request, please try again Later" });
+                TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                TempData.Keep("Failled");
+                return RedirectToAction("ViewSemesters", "Admin");
             }
         }
         public IActionResult DeactivateUser(Guid id)

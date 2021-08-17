@@ -238,26 +238,30 @@ namespace ActivitySystem.Repository
                 return 0;
             }
         }
-        public int ChangeStatus(Guid? guid)
+        public int OpenActivty(Guid? guid)
         {
             try
             {
                 tblActivities ActivityInfo = _context.tblActivities.AsNoTracking().SingleOrDefault(U => U.GuId == guid);
-                if (ActivityInfo.IsOpen == true)
-                {
-                    ActivityInfo.IsOpen = false;
-                }
-                else
-                {
-                    ActivityInfo.IsOpen = true;
-                }
-
+                ActivityInfo.IsOpen = true;
                 _context.Update(ActivityInfo);
                 _context.SaveChanges();
-                if (ActivityInfo.IsOpen == true)
-                    return 1;
-                else
-                    return 2;
+                return 1;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+        public int CloseActivty(Guid? guid)
+        {
+            try
+            {
+                tblActivities ActivityInfo = _context.tblActivities.AsNoTracking().SingleOrDefault(U => U.GuId == guid);
+                ActivityInfo.IsOpen = false;
+                _context.Update(ActivityInfo);
+                _context.SaveChanges();
+                return 1;
             }
             catch
             {
@@ -297,27 +301,31 @@ namespace ActivitySystem.Repository
                 return 0;
             }
         }
-        public int ChangeSt(Guid? id)
+        public int ActivateActivity(Guid? id)
+        {
+            try
+            {
+                tblActivities ActivityInfo = _context.tblActivities.AsNoTracking().SingleOrDefault(U => U.GuId == id);
+                ActivityInfo.IsActive = true;
+                _context.Update(ActivityInfo);
+                _context.SaveChanges();
+                    return 1;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+        public int DeactivateActivity(Guid? id)
         {
             try
             {
 
                 tblActivities ActivityInfo = _context.tblActivities.AsNoTracking().SingleOrDefault(U => U.GuId == id);
-                if (ActivityInfo.IsActive == true)
-                {
-                    ActivityInfo.IsActive = false;
-                }
-                else
-                {
-                    ActivityInfo.IsActive = true;
-                }
+                ActivityInfo.IsActive = false;
                 _context.Update(ActivityInfo);
                 _context.SaveChanges();
-                if (ActivityInfo.IsActive == true)
-                    return 1;
-                else
-                    return 2;
-
+                return 1;
             }
             catch
             {
