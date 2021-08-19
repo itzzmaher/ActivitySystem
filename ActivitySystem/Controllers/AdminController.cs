@@ -19,12 +19,9 @@ namespace ActivitySystem.Controllers
         public IActionResult Index()
         {
             ViewData["Successful"] = TempData["Success"];
-            if (User.IsInRole("SuperAdmin"))
-            return View(UsersInformation.GetAllUsersForSuperAdmin());
-            else
-                return View(UsersInformation.GetAllUsersForAdmin());
-        }
+            return View(UsersInformation.GetAllUsers());
 
+        }
         public IActionResult Dashboard()
         {
             ViewData["TodayName"] = DateTime.Now.DayOfWeek.ToString();
@@ -50,15 +47,16 @@ namespace ActivitySystem.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddSemester(tblSemesters SemInfo)
         {
-          int CheckResult = ActivityInformation.AddSemester(SemInfo);
+            int CheckResult = ActivityInformation.AddSemester(SemInfo);
             if (CheckResult == 1)
                 ViewData["Successful"] = "Semester Added Successfully";
-            else if (CheckResult == 2) { 
+            else if (CheckResult == 2)
+            {
                 ViewData["Falied"] = "This Semester already Exist";
                 ViewData["NoRedirect"] = "No Redirect";
             }
             else
-               ViewData["Falied"] = "An Error Occurred while processing your request, please try again Later";
+                ViewData["Falied"] = "An Error Occurred while processing your request, please try again Later";
             return View();
         }
         public IActionResult ViewActivities()
@@ -131,7 +129,7 @@ namespace ActivitySystem.Controllers
             ViewData["CollegeId"] = new SelectList(UsersInformation.GetAllColleges(), "Id", "CollegeName", UserInfo.CollegeId);
             return View(UserInfo);
         }
-        public IActionResult SemesterState(Guid? id,string status)
+        public IActionResult SemesterState(Guid? id, string status)
         {
             try
             {
@@ -141,7 +139,7 @@ namespace ActivitySystem.Controllers
                     TempData["Success"] = "Semeter has been activated Successfully";
                     TempData.Keep("Success");
                     return RedirectToAction("ViewSemesters", "Admin");
-                    
+
                 }
                 else if (CheckResult == 2)
                 {
@@ -162,7 +160,7 @@ namespace ActivitySystem.Controllers
                 TempData.Keep("Failled");
                 return RedirectToAction("ViewSemesters", "Admin");
             }
-          
+
         }
 
         public IActionResult ActivateActivty(Guid? id)
@@ -170,15 +168,17 @@ namespace ActivitySystem.Controllers
             try
             {
                 int checkResult = ActivityInformation.ActivateActivity(id);
-                if (checkResult == 1){
+                if (checkResult == 1)
+                {
                     TempData["Success"] = "Activity has been Activated Successfully";
                     TempData.Keep("Success");
                     return RedirectToAction("ViewActivities", "Admin");
                 }
-                else {
+                else
+                {
                     TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
                     TempData.Keep("Failled");
-                    return RedirectToAction("ViewActivities",  "Admin");
+                    return RedirectToAction("ViewActivities", "Admin");
                 }
             }
             catch
@@ -230,7 +230,7 @@ namespace ActivitySystem.Controllers
                 int checkResult = ActivityInformation.UpdateActivityAdmin(ActivityInfo);
                 if (checkResult == 1)
                     ViewData["Successful"] = "Activity Updated Successfully";
-                }
+            }
             catch
             {
                 ViewData["Falied"] = "An Error Occurred while processing your request, please try again Later";
@@ -289,7 +289,7 @@ namespace ActivitySystem.Controllers
         }
         public IActionResult ModifyUserInfo(Guid id)
         {
-            
+
             ViewData["CollegeId"] = new SelectList(UsersInformation.GetAllColleges(), "Id", "CollegeName");
             if (User.IsInRole("SuperAdmin"))
             {
@@ -308,7 +308,8 @@ namespace ActivitySystem.Controllers
             try
             {
                 int CheckResult = UsersInformation.UpdateUserInfoByAdmin(UserInfo);
-                if (CheckResult == 1) { 
+                if (CheckResult == 1)
+                {
                     ViewData["Successful"] = "User information was modified successfully";
                 }
             }
@@ -323,17 +324,18 @@ namespace ActivitySystem.Controllers
             try
             {
                 int CheckResult = ActivityInformation.SemesterDelete(id);
-                if (CheckResult == 1) { 
+                if (CheckResult == 1)
+                {
                     TempData["Success"] = "Semeter has been Deleted Successfully";
-                TempData.Keep("Success");
-                return RedirectToAction("ViewSemesters", "Admin");
+                    TempData.Keep("Success");
+                    return RedirectToAction("ViewSemesters", "Admin");
                 }
                 else
                 {
                     TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
                     TempData.Keep("Failled");
                     return RedirectToAction("ViewSemesters", "Admin");
-                }  
+                }
             }
             catch
             {
@@ -345,14 +347,15 @@ namespace ActivitySystem.Controllers
         public IActionResult DeactivateUser(Guid id)
         {
             tblUsers UserInfo = UsersInformation.GetUserByGuId(id);
-          
-                int CheckResult = UsersInformation.DeactivateUser(UserInfo);
-                if(CheckResult == 1) { 
+
+            int CheckResult = UsersInformation.DeactivateUser(UserInfo);
+            if (CheckResult == 1)
+            {
                 TempData["Success"] = "Account has been deactivated successfully";
                 TempData.Keep("Success");
                 return RedirectToAction("Index", "Admin");
-                }
-                
+            }
+
             else
             {
                 TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
@@ -374,9 +377,9 @@ namespace ActivitySystem.Controllers
         {
             try
             {
-                 string EncryptedPassword = new AccountController().Encrypt(UserInfo.Password);
-                 UsersInformation.ActivateUser(UserInfo, EncryptedPassword);
-                 ViewData["Successful"] = "User Activated Successfully";
+                string EncryptedPassword = new AccountController().Encrypt(UserInfo.Password);
+                UsersInformation.ActivateUser(UserInfo, EncryptedPassword);
+                ViewData["Successful"] = "User Activated Successfully";
             }
             catch
             {
@@ -384,5 +387,25 @@ namespace ActivitySystem.Controllers
             }
             return View();
         }
+        public IActionResult DeleteAccount(Guid? Id)
+        {
+
+            int CheckResult = UsersInformation.DeleteAccount(Id);
+            if (CheckResult == 1)
+            {
+                TempData["Success"] = "Account has been deleted successfully";
+                TempData.Keep("Success");
+                return RedirectToAction("Index", "Admin");
+            }
+
+            else
+            {
+                TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                TempData.Keep("Failled");
+                return RedirectToAction("Index", "Admin");
+            }
+        }
     }
 }
+
+

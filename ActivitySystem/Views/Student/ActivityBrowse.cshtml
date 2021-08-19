@@ -1,43 +1,9 @@
 ﻿@model IEnumerable<tblActivities>;
-@*<div class="card-body">
-        <div class="row justify-content-center ">
-            <div class="col-lg-10">
-                <table id="datatablesSimple">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Activity Name</th>
-                            <th>Supervisor Name</th>
-                            <th>Supervisor KFU Email</th>
-                            <th>Register Start Time</th>
-                            <th>Register End Time</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @{ var i = 1;
-                            foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>@i</td>
-                                    <td>@item.ActivityName</td>
-                                    <td>@item.Supervisor.Name</td>
-                                    <td>@item.Supervisor.KfuEmail</td>
-                                    <td>@item.StartDate</td>
-                                    <td>@item.EndDate</td>
-                                    <td><a class="btn btn-outline-info" asp-controller="Activity" asp-action="Registration" asp-route-id=@item.GuId>Register</a></td>
-                                </tr>
-                                i++;
-                            } }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>*@
+
 <div class="card-body">
     <div class="card text-center o-hidden shadow-lg" style="margin-top: 44px;">
         <div class="row">
-
+            
 
             @{ var i = 1;
                 foreach (var item in Model)
@@ -52,10 +18,11 @@
                             </div>
                         </div>
                     </div>
-                    
 
-                        i++;
-                        } }
-                    </div>
-                </div>
+
+                    i++;
+                } }
+        </div>
+    </div>
 </div>
+

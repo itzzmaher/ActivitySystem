@@ -15,11 +15,10 @@ namespace ActivitySystem.Controllers
         
         UsersRepository UsersInformation = new UsersRepository();
         ActivityRepository ActivityInformation = new ActivityRepository();
-        public IActionResult Index(string msgsuccsess, string msgfail)
+        public IActionResult Index()
         {
-            ViewData["Successful"] = msgsuccsess;
-            ViewData["Falied"] = msgfail;
-            ViewData["StudentName"] = User.FindFirst(ClaimTypes.GivenName).Value;
+            ViewData["Successful"] = TempData["Success"];
+            ViewData["Failled"] = TempData["Failled"];
             return View(ActivityInformation.GetAllStudentRegisterations(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)));
         }
 
@@ -60,10 +59,10 @@ namespace ActivitySystem.Controllers
             return View(ActivityInformation.GetActivityByGuId(id));
         }
 
-        public IActionResult CancelRegisteration(string msgsuccsess, string msgfail)
+        public IActionResult CancelRegisteration()
         {
-            ViewData["Successful"] = msgsuccsess;
-            ViewData["Falied"] = msgfail;
+            ViewData["Successful"] = TempData["Success"];
+            ViewData["Failled"] = TempData["Failled"];
             return View(ActivityInformation.GetAllWaitingActivitiesForStudent(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)));
         }
         public IActionResult Cancelation(Guid? id)
@@ -71,14 +70,19 @@ namespace ActivitySystem.Controllers
             try
             {
                 int checkResult = ActivityInformation.CancelRegister(id, int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
-                if (checkResult == 1)
-                    return RedirectToAction("Index", "Student", new { msgsuccsess = "You canceled your registeration successfully", msgfail = "" });
-                else
-                    return RedirectToAction("Index", "Student", new { msgsuccsess = "", msgfail = "An Error Occurred while processing your request, please try again Later" });
+                if (checkResult == 1) {
+                    TempData["Success"] = "You canceled your registeration successfully";
+                    return RedirectToAction("CancelRegisteration", "Student");
+                }
+                else {
+                    TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                    return RedirectToAction("CancelRegisteration", "Student");
+                    }
             }
             catch
-            {
-                return RedirectToAction("Index", "Student", new { msgsuccsess = "", msgfail = "An Error Occurred while processing your request, please try again Later" });
+            {;
+                TempData["Failled"] = "An Error Occurred while processing your request, please try again Later";
+                    return RedirectToAction("CancelRegisteration", "Student");
             }
         }
         public IActionResult ViewActivtyInfo(Guid? id)

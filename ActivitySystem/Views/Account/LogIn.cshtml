@@ -2,7 +2,20 @@
     Layout = "~/Views/Shared/MyLayout.cshtml";
 }
 @model ActivitySystem.Models.tblUsers;
-
+<head>
+    <title>Login</title>
+    <script>
+    @{
+        if (@ViewData["Falied"] != null)
+        {
+            <Text>
+            var result = '@Html.Raw(ViewData["Falied"])';
+            Swal.fire(result, '', 'error')
+            </Text>
+        }
+    }
+    </script>
+</head>
 <body>
     <div class="container">
         <div class="row justify-content-center">
@@ -26,6 +39,10 @@
                                 {
                                     <p>Incorrect Password or Email</p>
                                 }
+                                @*@if (ViewData["NotAutherozied"] != null)
+                                    {
+                                        <p>@ViewData["NotAutherozied"]</p>
+                                    }*@
                             </div>
                             <div class="form-floating mb-3">
                                 <button type="submit" class="btn btn-dark btn-search" onclick="return Valdation()"> Login </button>
@@ -41,5 +58,3 @@
         </div>
     </div>
 </body>
-
-

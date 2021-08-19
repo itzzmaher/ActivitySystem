@@ -18,6 +18,7 @@ namespace ActivitySystem.Models
         public tblRoles Role { get; set; }
         public int RoleId { get; set; }
         public bool IsActive { get; set; }
+        public bool? IsGraduate { get; set; }
 
     }
 }

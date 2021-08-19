@@ -74,6 +74,11 @@ namespace ActivitySystem.Controllers
                     ViewData["Login_error"] = "Login Failed";
                     //ViewData["NoRedirect"] = "No Redirect";
                 }
+                else if (Account.IsGraduate == true)
+                {
+                    ViewData["Falied"] = "Your account has been suspended because you're no longer a student";
+                    return View();
+                }
                 else
                 {
                     var identity = new ClaimsIdentity(new[]
@@ -83,6 +88,7 @@ namespace ActivitySystem.Controllers
                     new Claim(ClaimTypes.NameIdentifier, Account.Id.ToString()),
                     new Claim(ClaimTypes.Name, Account.GuId.ToString()),
                     new Claim(ClaimTypes.GivenName, Account.Name)
+
                     }, CookieAuthenticationDefaults.AuthenticationScheme);
                     var principal = new ClaimsPrincipal(identity);
                     await HttpContext.SignInAsync(

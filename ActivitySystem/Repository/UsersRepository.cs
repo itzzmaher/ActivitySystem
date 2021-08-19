@@ -14,17 +14,10 @@ namespace ActivitySystem.Repository
     {
         public IEnumerable<tblUsers> GetAllUsers()
         {
-            return _context.tblUsers;
-        }
-        public IEnumerable<tblUsers> GetAllUsersForSuperAdmin()
-        {
             return _context.tblUsers.Include(C => C.College).Include(R => R.Role);
         }
         
-        public IEnumerable<tblUsers> GetAllUsersForAdmin()
-        {
-            return _context.tblUsers.Include(C=>C.College).Include(R => R.Role).Where(R=>R.RoleId != 1);
-        }
+
         public int UserInsert(tblUsers userInfo)
         {
             try
@@ -120,10 +113,7 @@ namespace ActivitySystem.Repository
         }
         public tblUsers GetAccountsForLogin(tblUsers userinfo,string Password)
         {
-            
-            
-                return _context.tblUsers.Include(R => R.Role).SingleOrDefault(U => U.KfuEmail == userinfo.KfuEmail && U.Password == Password);
-
+            return _context.tblUsers.Include(R => R.Role).SingleOrDefault(U => U.KfuEmail == userinfo.KfuEmail && U.Password == Password);
         }
         public int ActivateUser(tblUsers userinfo,string Password)
         {
@@ -170,6 +160,11 @@ namespace ActivitySystem.Repository
 
             return null;
         }
+        public bool? CheckIsDeleted (int Id)
+        {
+            tblUsers UserInfoByID = GetUserById(Id);
+            return UserInfoByID.IsGraduate;
+        }
         public int UpdateUserInfoByAdmin(tblUsers UserInfo)
         {
             try
@@ -203,6 +198,22 @@ namespace ActivitySystem.Repository
                 return 0;
             }
             
+        }
+        public int DeleteAccount(Guid? Id)
+        {
+            try
+            {
+                tblUsers UserInfoByGuid = GetUserByGuId(Id);
+                UserInfoByGuid.IsGraduate = true;
+                _context.Update(UserInfoByGuid);
+                _context.SaveChanges();
+                return 1;
+            }
+            catch
+            {
+                return 0;
+            }
+
         }
     }
 }
