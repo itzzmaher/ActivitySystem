@@ -47,15 +47,15 @@ namespace ActivitySystem.Repository
         }
         public IEnumerable<tblUsers> GetAllStudents()
         {
-            return _context.tblUsers.Where(U => U.RoleId == 4 && U.IsActive == true);
+            return _context.tblUsers.Where(U => U.RoleId == 4 && U.IsActive == true && U.IsGraduate == false);
         }
         public IEnumerable<tblUsers> GetAllInstuctors()
         {
-            return _context.tblUsers.Where(U => U.RoleId == 3 && U.IsActive == true);
+            return _context.tblUsers.Where(U => U.RoleId == 3 && U.IsActive == true && U.IsGraduate == false);
         }
         public IEnumerable<tblUsers> GetAllAdmins()
         {
-            return _context.tblUsers.Where(U => U.RoleId == 1 && U.IsActive == true);
+            return _context.tblUsers.Where(U => U.RoleId == 1 && U.IsActive == true && U.IsGraduate == false);
         }
         public IEnumerable<tblColleges> GetAllColleges()
         {
@@ -160,11 +160,7 @@ namespace ActivitySystem.Repository
 
             return null;
         }
-        public bool? CheckIsDeleted (int Id)
-        {
-            tblUsers UserInfoByID = GetUserById(Id);
-            return UserInfoByID.IsGraduate;
-        }
+
         public int UpdateUserInfoByAdmin(tblUsers UserInfo)
         {
             try

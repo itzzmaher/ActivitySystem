@@ -37,12 +37,12 @@
                             <div class="row">
                                 @if (ViewData["Login_error"] != null)
                                 {
-                                    <p>Incorrect Password or Email</p>
+                                    <p style="color:red;">Incorrect Password or Email</p>
                                 }
-                                @*@if (ViewData["NotAutherozied"] != null)
+                                @if (ViewData["NotAutherozied"] != null)
                                     {
-                                        <p>@ViewData["NotAutherozied"]</p>
-                                    }*@
+                                        <p style="color:red;">@ViewData["NotAutherozied"]</p>
+                                    }
                             </div>
                             <div class="form-floating mb-3">
                                 <button type="submit" class="btn btn-dark btn-search" onclick="return Valdation()"> Login </button>

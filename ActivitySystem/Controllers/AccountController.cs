@@ -76,7 +76,7 @@ namespace ActivitySystem.Controllers
                 }
                 else if (Account.IsGraduate == true)
                 {
-                    ViewData["Falied"] = "Your account has been suspended because you're no longer a student";
+                    ViewData["NotAutherozied"] = "Your account has been suspended because you're no longer in KFU";
                     return View();
                 }
                 else

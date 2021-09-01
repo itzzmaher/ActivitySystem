@@ -8,7 +8,8 @@
                     <tr>
                         <th>#</th>
                         <th>Activity Name</th>
-                        <th>Status</th>
+                        <th>Registeration State</th>
+                        <th>Action</th>
                         <th>View</th>
 
                     </tr>
@@ -17,15 +18,18 @@
                     @{ var i = 1;
                         foreach (var item in Model)
                         {
+
                             <tr>
                                 <td>@i </td>
                                 <td>@item.Activity.ActivityName</td>
+
                                 <td>@item.StatusReg.StatusName</td>
                                 <td>
-                                    @if (item.StatusRegId == 1 || item.StatusRegId == 2)
+                                    @if ((item.StatusRegId == 1 || item.StatusRegId == 2) && item.Activity.IsActive == true)
                                     {
-                                        <a asp-controller="Student" asp-action="Cancelation" asp-route-id="@item.GuId" asp-route-status="Cancel" class="btn btn-outline-warning">Cancel </a>
-                                    }
+                                        <a asp-controller="Student" asp-action="Cancelation" asp-route-id="@item.GuId" asp-route-status="Cancel" class="btn btn-warning">Cancel </a>}
+                                </td>
+                                <td>
                                     <a class="btn btn-outline-info" asp-controller="Student" asp-action="ViewActivtyInfo" asp-route-id=@item.GuId>View</a>
                                 </td>
                             </tr>

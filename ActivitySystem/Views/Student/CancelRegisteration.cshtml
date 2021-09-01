@@ -8,9 +8,8 @@
                     <tr>
                         <th>#</th>
                         <th>Activity Name</th>
-                        <th>Student Name</th>
                         <th>Status</th>
-                        <th>Approve/Deny</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -20,10 +19,10 @@
                             <tr>
                                 <td>@i </td>
                                 <td>@item.Activity.ActivityName</td>
-                                <td>@item.User.Name</td>
+
                                 <td>@item.StatusReg.StatusName</td>
                                 <td>
-                                    @if (item.StatusRegId == 1 || item.StatusRegId == 2)
+                                    @if ((item.StatusRegId == 1 || item.StatusRegId == 2) && item.Activity.IsActive == true)
                                     {
                                         <a asp-controller="Student" asp-action="Cancelation" asp-route-id="@item.GuId" asp-route-status="Cancel" class="btn btn-warning">Cancel </a>}
                                 </td>

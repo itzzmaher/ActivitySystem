@@ -62,12 +62,16 @@
                                     {
                                         <a asp-controller="Admin" asp-action="RemoveSemester" asp-route-id="@item.GuId" asp-route-status="Deactivate" class="btn btn-outline-danger">Delete </a>
                                     }
+                                    else
+                                    {
+                                        <p>Deleted</p>
+                                    }
 
                                 </td>
                             </tr>
                             i++;
                         }
-                        }
+                    }
                 </tbody>
             </table>
         </div>
