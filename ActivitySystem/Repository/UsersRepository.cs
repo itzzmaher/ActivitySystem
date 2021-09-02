@@ -7,16 +7,23 @@ using System.Threading.Tasks;
 using ActivitySystem.Models;
 using ActivitySystem.Repository.Common;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace ActivitySystem.Repository
 {
     public class UsersRepository : BaseContext
     {
-        public IEnumerable<tblUsers> GetAllUsers()
+        public IEnumerable<tblUsers> GetAllUsersSuperAdmin(int AccountID)
         {
-            return _context.tblUsers.Include(C => C.College).Include(R => R.Role);
+            
+            return _context.tblUsers.Include(C => C.College).Include(R => R.Role).Where(U => U.IsGraduate == false && U.Id != AccountID);
         }
-        
+        public IEnumerable<tblUsers> GetAllUsersAdmin(int collegeid, int AccountID)
+        {
+
+            return _context.tblUsers.Include(C => C.College).Include(R => R.Role).Where(U => U.IsGraduate == false && U.CollegeId == collegeid && U.Id != AccountID);
+        }
+
 
         public int UserInsert(tblUsers userInfo)
         {
@@ -27,6 +34,10 @@ namespace ActivitySystem.Repository
                     return 2; // user is already there
                 userInfo.GuId = Guid.NewGuid();
                 userInfo.IsActive = false;
+                if(userInfo.RoleId == 1)
+                {
+                    userInfo.CollegeId = null;
+                }
                 _context.Add(userInfo);
                 _context.SaveChanges();
                 return 1; // Add Successfuly

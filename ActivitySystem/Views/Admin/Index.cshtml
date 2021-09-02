@@ -1,17 +1,16 @@
 ﻿@model IEnumerable<tblUsers>
 <div class="card-body">
     <div id="v-card" class="row justify-content-center" style="margin-top: 44px;">
-        <div class="col-md-12 ">
+        <div class="col-md-10 ">
             <table id="datatablesSimple">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>User Name</th>
-                        <th>College</th>
-                        <th>Role</th>
-                        <th>Activation</th>
-                        <th>Ststus</th>
-                        <th>Modify</th>
+                        <th style="text-align:center">College</th>
+                        <th style="text-align:center">Role</th>
+                        <th>Action</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -22,14 +21,20 @@
                             <tr>
                                 <td>@i </td>
                                 <td>@item.Name</td>
-                                <td>@item.College.CollegeName</td>
-                                <td>@item.Role.RoleName</td>
+                                @if (@item.CollegeId == null)
+                                {
+                                    <td align="center"><p>-</p></td>
+                                }
+                                else
+                                {
+                                    <td align="center">@item.College.CollegeName</td>
+                                }
+                                <td align="center">@item.Role.RoleName</td>
 
                                 @if (User.IsInRole("Admin") && item.Role.Id == 1)
                                 {
                                     <td> </td>
-                                    <td> </td>
-                                    <td> </td>
+
                                 }
                                 else
                                 {
@@ -43,19 +48,15 @@
                                         {
                                             <a asp-controller="Admin" asp-action="AdminActivate" asp-route-id="@item.GuId" class="btn btn-outline-danger">Activate </a>
                                         }
-
-                                    </td>
-                                    <td>
                                         @if (item.IsGraduate == false)
                                         {
-                                            <a asp-controller="Admin" asp-action="DeleteAccount" asp-route-id="@item.GuId" class="btn btn-outline-success">Delete </a>
+                                            <a asp-controller="Admin" asp-action="DeleteAccount" asp-route-id="@item.GuId" class="btn btn-outline-danger">Delete </a>
                                         }
                                         else
                                         {
                                             <p>Deleted</p>
                                         }
-                                    </td>
-                                    <td><a asp-controller="Admin" asp-action="ModifyUserInfo" asp-route-id="@item.GuId" class="btn btn-outline-info">Modify</a></td>
+                                    <a asp-controller="Admin" asp-action="ModifyUserInfo" asp-route-id="@item.GuId" class="btn btn-outline-info">Modify</a></td>
                                 }
                             </tr>
                             i++;

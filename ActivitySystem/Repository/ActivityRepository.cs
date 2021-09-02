@@ -47,7 +47,7 @@ namespace ActivitySystem.Repository
                 _context.SaveChanges();
                 return 1; // Updated Successfuly
             }
-            catch (Exception st)
+            catch 
             {
                 return 0; // Update Failed
             }
@@ -72,7 +72,7 @@ namespace ActivitySystem.Repository
                 _context.SaveChanges();
                 return 1; // Updated Successfuly
             }
-            catch (Exception st)
+            catch 
             {
                 return 0; // Update Failed
             }
@@ -87,7 +87,7 @@ namespace ActivitySystem.Repository
         }
         public IEnumerable<tblSemesters> GetAllSemesters()
         {
-            return _context.tblSemesters;
+            return _context.tblSemesters.Where(U => U.IsDone == false);
         }
         public IEnumerable<tblActivities> GetAllActiveActivities(int AccountId)
         {

@@ -87,7 +87,9 @@ namespace ActivitySystem.Controllers
                     new Claim(ClaimTypes.Role, Account.Role.RoleName),
                     new Claim(ClaimTypes.NameIdentifier, Account.Id.ToString()),
                     new Claim(ClaimTypes.Name, Account.GuId.ToString()),
-                    new Claim(ClaimTypes.GivenName, Account.Name)
+                    new Claim(ClaimTypes.GivenName, Account.Name),
+                    new Claim(ClaimTypes.Sid, Account.CollegeId.ToString())
+
 
                     }, CookieAuthenticationDefaults.AuthenticationScheme);
                     var principal = new ClaimsPrincipal(identity);
@@ -344,7 +346,7 @@ namespace ActivitySystem.Controllers
                 client.Send(mailMessage);
                 return 1;
             }
-            catch (Exception ex)
+            catch 
             {
                 ModelState.AddModelError("Exception", "an Error has accured please contact the administration");
                 return 0;

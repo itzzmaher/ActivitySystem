@@ -41,21 +41,50 @@
             <div class="row">
                 <div class="col-md-6">
                     <label class="col-form-label">Role Name</label>
-                    <select class="form-control custom-select" asp-items="ViewBag.RoleId" asp-for="RoleId"></select>
+                    <select id="role" class="form-control custom-select" asp-items="ViewBag.RoleId" asp-for="RoleId">
+                        <option>Choose a College</option>
+                    </select>
+                    <div style="margin-top: 7px;" id="CheckCollege"></div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6" id="College">
                     <label class="col-form-label">College</label>
+
                     <select class="form-control custom-select" asp-items="ViewBag.CollegeId" asp-for="CollegeId"></select>
                 </div>
             </div>
             <br />
             <div class="row">
                 <div class="col-md-12 " style="text-align: left;">
-                    <button type="submit" class="btn btn-dark btn-search" onclick="return Valdation()"> Add </button>
+                    <button type="submit" id="submit" class="btn btn-dark btn-search" onclick="return Valdation()"> Add </button>
                 </div>
             </div>
         </form>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $('#role').on('change', function () {
+        if (this.value == 1) {
+            $('#College').hide();
+        }
+        else
+            $('#College').show();
+        
+    });
+    $(function () {
+        $("#submit").click(function () {
+            var role = $("#role").val();
+            if (role == "Choose a College") {
+                $("#CheckCollege").html("Please choose a college").css("color", "red");
+                return false;
+            }
+            $("#CheckCollege").html("").css("color", "red");
+            return true;
+        });
+    });
+
+</script>

@@ -19,7 +19,11 @@ namespace ActivitySystem.Controllers
         public IActionResult Index()
         {
             ViewData["Successful"] = TempData["Success"];
-            return View(UsersInformation.GetAllUsers());
+            if (User.IsInRole("SuperAdmin"))
+                return View(UsersInformation.GetAllUsersSuperAdmin(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)));
+            else
+                return View(UsersInformation.GetAllUsersAdmin(int.Parse(User.FindFirst(ClaimTypes.Sid).Value), int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)));
+
 
         }
         public IActionResult Dashboard()
@@ -311,6 +315,7 @@ namespace ActivitySystem.Controllers
                 if (CheckResult == 1)
                 {
                     ViewData["Successful"] = "User information was modified successfully";
+                    
                 }
             }
             catch
